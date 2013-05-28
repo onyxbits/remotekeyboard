@@ -147,6 +147,14 @@ public class RemoteKeyboardService extends InputMethodService implements
 				}
 				break;
 			}
+			case 3: {
+				try{
+					TelnetEditorShell.self.disconnect();
+				}
+				catch (Exception e) {
+					
+				}
+			}
 		}
 	}
 

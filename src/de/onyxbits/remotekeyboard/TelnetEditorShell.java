@@ -62,6 +62,14 @@ public class TelnetEditorShell implements Shell {
 
 	@Override
 	public void connectionSentBreak(ConnectionEvent ce) {}
+	
+	/**
+	 * Disconnect from remote by closing the socket
+	 * @throws IOException 
+	 */
+	protected void disconnect() throws IOException {
+		m_IO.close();
+	}
 
 	@Override
 	public void run(Connection con) {

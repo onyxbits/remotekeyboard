@@ -8,6 +8,8 @@
     <Row android:keyWidth="50%" >
     	<Key android:keyIcon="@drawable/ic_action_selectime" android:codes="0" />
     	<!-- <Key android:keyIcon="@drawable/ic_action_settings" android:codes="1" /> -->
+    	<!-- Do we really need an explicit d/c key? Switching the IME does the same and is cleaner -->
+    	<!-- <Key android:keyIcon="@drawable/ic_action_disconnect" android:codes="3"  /> -->
     	<Key android:keyIcon="@drawable/ic_action_transfer" android:codes="2"  />
     </Row>
     
