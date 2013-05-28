@@ -1,8 +1,11 @@
 package de.onyxbits.remotekeyboard;
 
 import net.wimpi.telnetd.io.TerminalIO;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.inputmethod.ExtractedText;
+import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 
 /**
@@ -39,11 +42,6 @@ class InputAction implements Runnable {
 	 */
 	protected RemoteKeyboardService myService;
 
-	/**
-	 * When pooling: for finding a free one
-	 */
-	protected boolean inUse = false;
-
 	public InputAction() {
 	}
 
@@ -74,9 +72,14 @@ class InputAction implements Runnable {
 		return 0;
 	}
 
-	@Override
+	// @Override
 	public void run() {
 		Log.w("INPPUTACTION", "" + symbol);
+		InputConnection con = myService.getCurrentInputConnection();
+		if (con == null) {
+			return;
+		}
+
 		switch (symbol) {
 		// FIXME: Dirty hack! Most telnet clients send DELETE instead of BACKSPACE
 		// when the physical backspace key is pressed. This is usually
@@ -85,48 +88,97 @@ class InputAction implements Runnable {
 			case TerminalIO.DEL:
 			case TerminalIO.DELETE:
 			case TerminalIO.BACKSPACE: {
-				myService.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL);
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+						KeyEvent.KEYCODE_DEL));
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
 				break;
 			}
 			case TerminalIO.ENTER:
 			case '\n': {
 				// NOTE: Workaround for a bug in the telnet library! It should return
 				// ENTER, but does return LF.
-				myService.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+						KeyEvent.KEYCODE_ENTER));
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
+						KeyEvent.KEYCODE_ENTER));
 				break;
 			}
 			case TerminalIO.LEFT: {
-				myService.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+						KeyEvent.KEYCODE_DPAD_LEFT));
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
+						KeyEvent.KEYCODE_DPAD_LEFT));
 				break;
 			}
 			case TerminalIO.RIGHT: {
-				myService.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT);
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+						KeyEvent.KEYCODE_DPAD_RIGHT));
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
+						KeyEvent.KEYCODE_DPAD_RIGHT));
 				break;
 			}
 			case TerminalIO.UP: {
-				myService.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_UP);
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+						KeyEvent.KEYCODE_DPAD_UP));
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
+						KeyEvent.KEYCODE_DPAD_UP));
 				break;
 			}
 			case TerminalIO.DOWN: {
-				myService.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_DOWN);
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+						KeyEvent.KEYCODE_DPAD_DOWN));
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
+						KeyEvent.KEYCODE_DPAD_DOWN));
 				break;
 			}
 			case TerminalIO.ESCAPE: {
-				myService.sendDownUpKeyEvents(KeyEvent.KEYCODE_BACK);
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+						KeyEvent.KEYCODE_BACK));
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK));
 				break;
 			}
 			case TerminalIO.TABULATOR: {
-				myService.sendDownUpKeyEvents(KeyEvent.KEYCODE_TAB);
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+						KeyEvent.KEYCODE_TAB));
+				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_TAB));
 				break;
 			}
-			default: {
-				InputConnection inputConnection = myService.getCurrentInputConnection();
-				if (inputConnection != null) {
-					inputConnection.commitText(new String(sequence), 1);
+
+			// Hacky time! Redefine the semantics of CTRL-A to select-all
+			case TerminalIO.COLORINIT: {
+				ExtractedText text = con
+						.getExtractedText(new ExtractedTextRequest(), 0);
+				try {
+					con.setSelection(0, text.text.length());
 				}
+				catch (NullPointerException e) {
+					// Potentially, text or text.text can be null
+				}
+				break;
+			}
+
+			// Hacky time! Redefine the semantics of ASCII ETX (CTRL-C) to copy
+			case 3: {
+				con.performContextMenuAction(android.R.id.copy);
+				break;
+			}
+
+			// Hacky time! Redefine the semantics of ASCII SYN (CTRL-V) to paste
+			case 22: {
+				con.performContextMenuAction(android.R.id.paste);
+				break;
+			}
+			
+			// Hacky time! Redefine the semantics of ASCII CAN (CTRL-X) to cut
+			case 24: {
+				con.performContextMenuAction(android.R.id.cut);
+				break;
+			}
+
+			default: {
+				con.commitText(new String(sequence), 1);
 			}
 		}
-		inUse = false;
 	}
 
 }

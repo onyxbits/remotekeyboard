@@ -16,6 +16,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.hardware.input.InputManager;
 import android.inputmethodservice.InputMethodService;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -40,91 +41,27 @@ import net.wimpi.telnetd.shell.Shell;
 public class TelnetEditorShell implements Shell {
 
 	public static final String TAG = "EditorShell";
-	public static final char[] SPINNER = { '-', '/', '|', '\\' };
-	private int spinnerIndex;
 
 	protected static TelnetEditorShell self;
 
-	protected Titlebar titleBar;
-	protected Statusbar statusBar;
-	protected Label content;
+	private Titlebar titleBar;
+	private Statusbar statusBar;
+	private Label content;
+	private BasicTerminalIO m_IO;
 
-	protected BasicTerminalIO m_IO;
-
-	// NOTE: We start out with 1 object and expand dynamically when more
-	// are needed. For normal typing, 1 object usually suffices. When holding
-	// a key at a normal key repeat rate, we might need 3-4 objects. However,
-	// when the user uses copy and paste, the object count may go through the
-	// roof.
-	private InputAction actionPool[] = { new InputAction() };
-
-	public TelnetEditorShell() {
-
-	}
+	public TelnetEditorShell() {}
 
 	@Override
-	public void connectionIdle(ConnectionEvent ce) {
-		// TODO Auto-generated method stub
-
-	}
+	public void connectionIdle(ConnectionEvent ce) {}
 
 	@Override
-	public void connectionTimedOut(ConnectionEvent ce) {
-		// TODO Auto-generated method stub
-
-	}
+	public void connectionTimedOut(ConnectionEvent ce) {}
 
 	@Override
-	public void connectionLogoutRequest(ConnectionEvent ce) {
-		// TODO Auto-generated method stub
-
-	}
+	public void connectionLogoutRequest(ConnectionEvent ce) {}
 
 	@Override
-	public void connectionSentBreak(ConnectionEvent ce) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * Pick an action from the actionPool that is not in use
-	 * 
-	 * @return a pooled inputaction.
-	 */
-	private InputAction getFreeInputAction() {
-		for (int i = 0; i < actionPool.length; i++) {
-			if (!actionPool[i].inUse) {
-				return actionPool[i];
-			}
-		}
-
-		// No free items in the pool
-		if (actionPool.length < 20) {
-			// Expand the pool
-			Log.d(TAG, "Buffer to small -> expanding to " + actionPool.length
-					+ " entries");
-			InputAction[] tmp = new InputAction[actionPool.length + 1];
-			System.arraycopy(actionPool, 0, tmp, 0, actionPool.length);
-			tmp[tmp.length - 1] = new InputAction();
-			actionPool = tmp;
-			return actionPool[actionPool.length - 1];
-		}
-		else {
-			// Throttle (the user is probably posting massive text via copy&paste)
-			while (true) {
-				try {
-					Thread.sleep(10);
-				}
-				catch (InterruptedException e) {
-				}
-				for (int i = 0; i < actionPool.length; i++) {
-					if (!actionPool[i].inUse) {
-						return actionPool[i];
-					}
-				}
-			}
-		}
-	}
+	public void connectionSentBreak(ConnectionEvent ce) {}
 
 	@Override
 	public void run(Connection con) {
@@ -163,8 +100,8 @@ public class TelnetEditorShell implements Shell {
 
 			int in;
 			int offset = 0;
-			InputAction inputAction = null;
-			long lastEvent = SystemClock.uptimeMillis();
+			InputAction inputAction = new InputAction();
+			ActionRunner actionRunner = new ActionRunner();
 
 			// Main loop starts here
 			while (true) {
@@ -175,8 +112,6 @@ public class TelnetEditorShell implements Shell {
 					break;
 				}
 				if (offset == 0) {
-					inputAction = getFreeInputAction();
-					inputAction.inUse = true;
 					inputAction.symbol = in;
 					inputAction.sequence = inputAction.buffer[InputAction.getBuffer(in)];
 				}
@@ -185,21 +120,9 @@ public class TelnetEditorShell implements Shell {
 				if (offset == inputAction.sequence.length) {
 					offset = 0;
 					inputAction.myService = RemoteKeyboardService.self;
-					// FIXME: When the user uses copy&paste, the UI may be clogged up
-					// since the garbage collector cleans up after posting actions.
-					// Throttling helps but what we really need is a way to merge
-					// actions.
-					long now = SystemClock.uptimeMillis();
-					;
-					if ((now - lastEvent) > 30) {
-						try {
-							Thread.sleep(30);
-						}
-						catch (InterruptedException e) {
-						}
-					}
-					lastEvent = now;
-					RemoteKeyboardService.self.handler.post(inputAction);
+					actionRunner.setAction(inputAction);
+					RemoteKeyboardService.self.handler.post(actionRunner);
+					actionRunner.waitResult();
 				}
 			}
 
