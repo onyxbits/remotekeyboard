@@ -14,6 +14,7 @@ libs/*
 compiled/
 compiled/*
 local.properties
+build.xml
 assets/build.properties
 .settings/
 .settings/*
