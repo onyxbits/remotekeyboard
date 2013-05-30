@@ -85,7 +85,7 @@ public class MainActivity extends Activity implements
 		switch (item.getItemId()) {
 			case R.id.item_help: {
 				Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-						Uri.parse("http://www.onyxbits.de/remotekeyboard/help"));
+						Uri.parse("http://www.onyxbits.de/remotekeyboard"));
 				startActivity(browserIntent);
 				break;
 			}
