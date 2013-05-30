@@ -40,7 +40,7 @@ import net.wimpi.telnetd.shell.Shell;
 
 public class TelnetEditorShell implements Shell {
 
-	public static final String TAG = "EditorShell";
+	public static final String TAG = "TelnetEditorShell";
 
 	protected static TelnetEditorShell self;
 

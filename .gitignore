@@ -15,3 +15,5 @@ compiled/
 compiled/*
 local.properties
 assets/build.properties
+.settings/
+.settings/*
