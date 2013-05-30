@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
+import android.widget.Toast;
 
 /**
  * Models a key event sent from the remote keyboard via the telnet protocol and
@@ -81,10 +82,16 @@ class InputAction implements Runnable {
 		}
 
 		switch (symbol) {
-		// FIXME: Dirty hack! Most telnet clients send DELETE instead of BACKSPACE
-		// when the physical backspace key is pressed. This is usually
-		// configurable but difficult to explain. So instead of explaining the
-		// issue, we just make both symbols semantically equivalent.
+			case TerminalIO.UNRECOGNIZED: {
+				String s = myService.getResources().getString(
+						R.string.err_esc_unsupported);
+				Toast.makeText(myService, s, Toast.LENGTH_SHORT).show();
+				break;
+			}
+			// FIXME: Dirty hack! Most telnet clients send DELETE instead of BACKSPACE
+			// when the physical backspace key is pressed. This is usually
+			// configurable but difficult to explain. So instead of explaining the
+			// issue, we just make both symbols semantically equivalent.
 			case TerminalIO.DEL:
 			case TerminalIO.DELETE:
 			case TerminalIO.BACKSPACE: {
@@ -168,7 +175,7 @@ class InputAction implements Runnable {
 				con.performContextMenuAction(android.R.id.paste);
 				break;
 			}
-			
+
 			// Hacky time! Redefine the semantics of ASCII CAN (CTRL-X) to cut
 			case 24: {
 				con.performContextMenuAction(android.R.id.cut);
@@ -180,5 +187,4 @@ class InputAction implements Runnable {
 			}
 		}
 	}
-
 }
