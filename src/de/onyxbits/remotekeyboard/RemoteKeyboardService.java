@@ -8,15 +8,10 @@ import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 
 import java.io.InputStream;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 import java.util.Properties;
 
 import net.wimpi.telnetd.BootException;
 import net.wimpi.telnetd.TelnetD;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -24,18 +19,13 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.inputmethodservice.InputMethodService;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
-import android.text.Editable;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class RemoteKeyboardService extends InputMethodService implements
@@ -58,7 +48,6 @@ public class RemoteKeyboardService extends InputMethodService implements
 
 	@Override
 	public void onStartInputView(EditorInfo info, boolean restarting) {
-
 	}
 
 	@Override
@@ -140,8 +129,7 @@ public class RemoteKeyboardService extends InputMethodService implements
 								new ExtractedTextRequest(), 0).text;
 					}
 					TelnetEditorShell.self.showText(txt + "");
-					Toast.makeText(this, R.string.app_dumped, Toast.LENGTH_SHORT)
-					.show();
+					Toast.makeText(this, R.string.app_dumped, Toast.LENGTH_SHORT).show();
 				}
 				catch (Exception exp) {
 					Toast.makeText(this, R.string.err_sendtonirvana, Toast.LENGTH_SHORT)
@@ -150,11 +138,11 @@ public class RemoteKeyboardService extends InputMethodService implements
 				break;
 			}
 			case 3: {
-				try{
+				try {
 					TelnetEditorShell.self.disconnect();
 				}
 				catch (Exception e) {
-					
+
 				}
 			}
 		}
@@ -162,14 +150,10 @@ public class RemoteKeyboardService extends InputMethodService implements
 
 	@Override
 	public void onRelease(int primaryCode) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -178,25 +162,18 @@ public class RemoteKeyboardService extends InputMethodService implements
 
 	@Override
 	public void swipeLeft() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void swipeRight() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void swipeDown() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void swipeUp() {
-		// TODO Auto-generated method stub
 	}
 
 	/**
