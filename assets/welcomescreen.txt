@@ -2,5 +2,8 @@
 	         Welcome to your Android keyboard. Just type
 	(\_/)     in this window to have key presses forwarded 
 	(^_^)      to your device (there will be no local echo).
-	(___)O      Press CTRL-D to disconnect.
+	(___)O      If you are typing non-ASCII characters and they
+                     turn out as garbage, check if your client is set
+                      to send UTF-8 encoded symbols. Press CTRL-D to 
+                       disconnect.
 	
