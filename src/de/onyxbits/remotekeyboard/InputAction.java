@@ -18,7 +18,7 @@ import android.widget.Toast;
  * 
  */
 class InputAction implements Runnable {
-	
+
 	public static final String TAG = "InputAction";
 
 	/**
@@ -150,6 +150,26 @@ class InputAction implements Runnable {
 				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
 						KeyEvent.KEYCODE_TAB));
 				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_TAB));
+				break;
+			}
+
+			case TerminalIO.RK_HOME: {
+				con.setSelection(0,0);
+				break;
+			}
+			case TerminalIO.RK_INS: {
+				// Dunno what to do with this one, yet.
+				break;
+			}
+			case TerminalIO.RK_DEL: {
+				con.deleteSurroundingText(0, 1);
+				break;
+			}
+			case TerminalIO.RK_END: {
+				ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
+				if (txt != null) {
+					con.setSelection(txt.text.length(),txt.text.length());
+				}
 				break;
 			}
 

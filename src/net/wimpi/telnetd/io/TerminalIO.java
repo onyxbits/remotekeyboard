@@ -460,12 +460,18 @@ public class TerminalIO implements BasicTerminalIO {
             for (int m = 0; m < bytebuf.length; m++) {
                 bytebuf[m] = m_TelnetIO.read();
             }
-            return m_Terminal.translateEscapeSequence(bytebuf);
+            int ret = m_Terminal.translateEscapeSequence(bytebuf);
+            if (ret==RK_DEL || ret==RK_INS) {
+            	// Hacky! Those two keys are 3 byte sequences -> remove the 
+            	// last byte from the stream.
+            	m_TelnetIO.read();
+            }
+            return ret;
         }
         if (i == BYTEMISSING) {
             //FIXME:longer escapes etc...
         }
-
+        
         return HANDLED;
     }//handleEscapeSequence
 
@@ -603,6 +609,11 @@ public class TerminalIO implements BasicTerminalIO {
     public static final int RIGHT = 1003; //one left
     public static final int LEFT = 1004; //one right
     //HOME=1005,      //Home cursor pos(0,0)
+    public static final int RK_HOME = 1005; // HOME KEY
+    public static final int RK_END = 1006;
+    public static final int RK_INS = 1007;
+    public static final int RK_DEL = 1008;
+    
 
     public static final int// Functions 105x
     STORECURSOR = 1051; //store cursor position + attributes
