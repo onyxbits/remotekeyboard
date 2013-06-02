@@ -18,5 +18,6 @@
     <string name="terminal_statusbar">Status: Connected</string>
     <string name="notification_peer">Connected to: %1$s</string>
     <string name="err_esc_unsupported">Function not supported, yet</string>
+    <string name="app_dumped">Text sent to client</string>
 
 </resources>
