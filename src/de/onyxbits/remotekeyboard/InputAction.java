@@ -18,6 +18,8 @@ import android.widget.Toast;
  * 
  */
 class InputAction implements Runnable {
+	
+	public static final String TAG = "InputAction";
 
 	/**
 	 * What fell out of TerminalIO.read(). This can either be an ASCII character
@@ -75,7 +77,7 @@ class InputAction implements Runnable {
 
 	// @Override
 	public void run() {
-		Log.w("INPPUTACTION", "" + symbol);
+		Log.d(TAG, "" + symbol);
 		InputConnection con = myService.getCurrentInputConnection();
 		if (con == null) {
 			return;
