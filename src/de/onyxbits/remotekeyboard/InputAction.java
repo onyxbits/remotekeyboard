@@ -97,59 +97,34 @@ class InputAction implements Runnable {
 			case TerminalIO.DEL:
 			case TerminalIO.DELETE:
 			case TerminalIO.BACKSPACE: {
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
-						KeyEvent.KEYCODE_DEL));
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
+				typeKey(con,KeyEvent.KEYCODE_DEL);
 				break;
 			}
 			case TerminalIO.ENTER:
 			case '\n': {
 				// NOTE: Workaround for a bug in the telnet library! It should return
 				// ENTER, but does return LF.
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
-						KeyEvent.KEYCODE_ENTER));
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
-						KeyEvent.KEYCODE_ENTER));
+				typeKey(con,KeyEvent.KEYCODE_ENTER);
 				break;
 			}
 			case TerminalIO.LEFT: {
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
-						KeyEvent.KEYCODE_DPAD_LEFT));
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
-						KeyEvent.KEYCODE_DPAD_LEFT));
+				typeKey(con,KeyEvent.KEYCODE_DPAD_LEFT);
 				break;
 			}
 			case TerminalIO.RIGHT: {
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
-						KeyEvent.KEYCODE_DPAD_RIGHT));
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
-						KeyEvent.KEYCODE_DPAD_RIGHT));
+				typeKey(con,KeyEvent.KEYCODE_DPAD_RIGHT);
 				break;
 			}
 			case TerminalIO.UP: {
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
-						KeyEvent.KEYCODE_DPAD_UP));
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
-						KeyEvent.KEYCODE_DPAD_UP));
+				typeKey(con,KeyEvent.KEYCODE_DPAD_UP);
 				break;
 			}
 			case TerminalIO.DOWN: {
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
-						KeyEvent.KEYCODE_DPAD_DOWN));
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
-						KeyEvent.KEYCODE_DPAD_DOWN));
-				break;
-			}
-			case TerminalIO.ESCAPE: {
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
-						KeyEvent.KEYCODE_BACK));
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK));
+				typeKey(con,KeyEvent.KEYCODE_DPAD_DOWN);
 				break;
 			}
 			case TerminalIO.TABULATOR: {
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
-						KeyEvent.KEYCODE_TAB));
-				con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_TAB));
+				typeKey(con,KeyEvent.KEYCODE_TAB);
 				break;
 			}
 
@@ -208,5 +183,15 @@ class InputAction implements Runnable {
 				con.commitText(new String(sequence), 1);
 			}
 		}
+	}
+	
+	/**
+	 * Send an down/up event
+	 * @con conenction to sent with
+	 * @param key keycode
+	 */
+	private void typeKey(InputConnection con, int key) {
+		con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,key));
+		con.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,key));
 	}
 }
