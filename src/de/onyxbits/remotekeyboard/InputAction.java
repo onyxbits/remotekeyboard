@@ -3,6 +3,7 @@ package de.onyxbits.remotekeyboard;
 import net.wimpi.telnetd.io.TerminalIO;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
@@ -175,6 +176,12 @@ class InputAction implements Runnable {
 			// Hacky time! Redefine the semantics of ASCII CAN (CTRL-X) to cut
 			case 24: {
 				con.performContextMenuAction(android.R.id.cut);
+				break;
+			}
+			
+			// Hacky time! Redefine the semantics of ASCII DC3 (CTRL-S) to Send
+			case 19: {
+				con.performEditorAction(EditorInfo.IME_ACTION_SEND);
 				break;
 			}
 
