@@ -90,7 +90,6 @@ public class TelnetEditorShell implements Shell {
 			showText(getWelcomeScreen());
 
 			int in;
-			int offset = 0;
 			InputAction inputAction = new InputAction();
 			ActionRunner actionRunner = new ActionRunner();
 
@@ -102,19 +101,17 @@ public class TelnetEditorShell implements Shell {
 					// into HANDLED.
 					break;
 				}
-				if (offset == 0) {
-					inputAction.symbol = in;
-					inputAction.sequence = inputAction.buffer[InputAction.getBuffer(in)];
+
+				inputAction.symbol = in;
+				inputAction.sequence = inputAction.buffer[InputAction.getBuffer(in)];
+				inputAction.sequence[0] = (byte) in;
+				for (int i=1;i<inputAction.sequence.length;i++) {
+					inputAction.sequence[i]= (byte) m_IO.read();
 				}
-				inputAction.sequence[offset] = (byte) in;
-				offset++;
-				if (offset == inputAction.sequence.length) {
-					offset = 0;
-					inputAction.myService = RemoteKeyboardService.self;
-					actionRunner.setAction(inputAction);
-					RemoteKeyboardService.self.handler.post(actionRunner);
-					actionRunner.waitResult();
-				}
+				actionRunner.setAction(inputAction);
+				inputAction.myService = RemoteKeyboardService.self;
+				RemoteKeyboardService.self.handler.post(actionRunner);
+				actionRunner.waitResult();
 			}
 
 			m_IO.eraseScreen();
