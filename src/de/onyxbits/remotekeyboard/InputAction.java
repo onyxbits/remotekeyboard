@@ -179,8 +179,8 @@ class InputAction implements Runnable {
 				break;
 			}
 			
-			// Hacky time! Redefine the semantics of ASCII DC3 (CTRL-S) to Send
-			case 19: {
+			// Hacky time! Redefine the semantics of ASCII FF (CTRL-L) to Send
+			case 12: {
 				con.performEditorAction(EditorInfo.IME_ACTION_SEND);
 				break;
 			}

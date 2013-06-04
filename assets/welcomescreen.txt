@@ -12,4 +12,4 @@
   CTRL-V	Paste
   CTRL-X	Cut
   CTRL-A	Select All
-  CTRL-S	Send
+  CTRL-L	Send
