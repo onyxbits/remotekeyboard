@@ -59,6 +59,11 @@ class Sequencer {
 	public static final int SHIFT_CURSOR_DOWN = BASE + 313;
 	public static final int SHIFT_CURSOR_LEFT = BASE + 314;
 
+	public static final int CTRL_CURSOR_UP = BASE + 315;
+	public static final int CTRL_CURSOR_RIGHT = BASE + 316;
+	public static final int CTRL_CURSOR_DOWN = BASE + 317;
+	public static final int CTRL_CURSOR_LEFT = BASE + 318;
+
 	/**
 	 * Escape sequence database. Interpretation comes first, followed by the
 	 * sequence (minus the ESC[).
@@ -74,6 +79,8 @@ class Sequencer {
 			{ DELETE, '3', '~' },
 			{ PAGE_UP,'5', '~'},
 			{ PAGE_UP,'6', '~'},
+			{ CTRL_CURSOR_LEFT, '1',';','5','D'},
+			{ CTRL_CURSOR_RIGHT, '1',';','5','C'},
 			
 	};
 	

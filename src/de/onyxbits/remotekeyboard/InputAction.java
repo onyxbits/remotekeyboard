@@ -91,6 +91,14 @@ class InputAction implements Runnable {
 				typeKey(con,KeyEvent.KEYCODE_TAB);
 				break;
 			}
+			case Sequencer.CTRL_CURSOR_LEFT: {
+				jumpBackward(con,' ');
+				break;
+			}
+			case Sequencer.CTRL_CURSOR_RIGHT: {
+				jumpForward(con,' ');
+				break;
+			}
 			case Sequencer.INSERT: {
 				// Dunno what to do with this one, yet.
 				break;
@@ -160,7 +168,7 @@ class InputAction implements Runnable {
 	private void jumpForward(InputConnection con, int symbol) {
 		ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
 		if (txt != null) {
-			int pos = txt.text.toString().indexOf(symbol, txt.selectionEnd);
+			int pos = txt.text.toString().indexOf(symbol, txt.selectionEnd+1);
       if (pos == -1) {
       	pos = txt.text.length();
       }
@@ -176,7 +184,7 @@ class InputAction implements Runnable {
 	private void jumpBackward(InputConnection con, int symbol) {
 		ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
 		if (txt != null) {
-			int pos = txt.text.toString().lastIndexOf(symbol, txt.selectionEnd - 1);
+			int pos = txt.text.toString().lastIndexOf(symbol, txt.selectionEnd - 2);
 			pos++;
 
 			con.setSelection(pos,pos);
