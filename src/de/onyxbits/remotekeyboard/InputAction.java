@@ -41,7 +41,7 @@ class InputAction implements Runnable {
 
 	// @Override
 	public void run() {
-		Log.d(TAG, "" + function);
+		//Log.d(TAG, "" + function);
 		InputConnection con = myService.getCurrentInputConnection();
 		if (con == null) {
 			return;
