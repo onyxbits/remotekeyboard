@@ -91,11 +91,6 @@ class InputAction implements Runnable {
 				typeKey(con,KeyEvent.KEYCODE_TAB);
 				break;
 			}
-
-			case Sequencer.HOME: {
-				con.setSelection(0,0);
-				break;
-			}
 			case Sequencer.INSERT: {
 				// Dunno what to do with this one, yet.
 				break;
@@ -104,10 +99,24 @@ class InputAction implements Runnable {
 				con.deleteSurroundingText(0, 1);
 				break;
 			}
+			case Sequencer.HOME: {
+				ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
+				if (txt != null) {
+					int pos = txt.text.toString().lastIndexOf('\n', txt.selectionEnd - 1);
+					pos++;
+
+					con.setSelection(pos,pos);
+				}
+				break;
+			}
 			case Sequencer.END: {
 				ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
 				if (txt != null) {
-					con.setSelection(txt.text.length(),txt.text.length());
+					int pos = txt.text.toString().indexOf('\n', txt.selectionEnd);
+		      if (pos == -1) {
+		      	pos = txt.text.length();
+		      }
+					con.setSelection(pos,pos);
 				}
 				break;
 			}
