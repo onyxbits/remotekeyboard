@@ -117,7 +117,6 @@ public class TelnetEditorShell implements Shell {
 					while (in == Sequencer.INCOMPLETE) {
 						in = sequencer.interpret(m_IO.read());
 						if (in == Sequencer.UNKNOWN) {
-							Log.d(TAG,"Unknown: "+Arrays.toString(sequencer.cBuffer));
 							break;
 						}
 					}

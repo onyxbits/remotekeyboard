@@ -80,7 +80,7 @@ class Sequencer {
 	/**
 	 * Buffer for escape sequences
 	 */
-	protected int[] cBuffer = new int[10];
+	private int[] cBuffer = new int[10];
 	
 	/**
 	 * Buffer index (for escape sequences
