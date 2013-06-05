@@ -147,7 +147,7 @@ public class TelnetEditorShell implements Shell {
 			// User disconnected disgracefully -> don't care.
 		}
 		catch (IOException e) {
-			Log.w(TAG, e);
+			//Log.w(TAG, e);
 		}
 		finally {
 			RemoteKeyboardService.self.updateNotification(null);
