@@ -114,14 +114,7 @@ class InputAction implements Runnable {
 
 			// Hacky time! Redefine the semantics of CTRL-A to select-all
 			case TerminalIO.COLORINIT: {
-				ExtractedText text = con
-						.getExtractedText(new ExtractedTextRequest(), 0);
-				try {
-					con.setSelection(0, text.text.length());
-				}
-				catch (NullPointerException e) {
-					// Potentially, text or text.text can be null
-				}
+				con.performContextMenuAction(android.R.id.selectAll);
 				break;
 			}
 
