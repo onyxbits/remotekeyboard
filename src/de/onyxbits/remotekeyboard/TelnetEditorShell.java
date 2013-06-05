@@ -133,7 +133,7 @@ public class TelnetEditorShell implements Shell {
 				
 				// Terminals interpret ASCII control characters and ANSI escape 
 				// sequences, so we have to set this either way.
-				inputAction.control = in;
+				inputAction.function = in;
 				
 				actionRunner.setAction(inputAction);
 				RemoteKeyboardService.self.handler.post(actionRunner);

@@ -24,7 +24,7 @@ class InputAction implements Runnable {
 	/**
 	 * A control character (anything thats not printable)
 	 */
-	protected int control;
+	protected int function;
 	
 	/**
 	 * Printable text to insert (anything thats not a control character).
@@ -41,13 +41,13 @@ class InputAction implements Runnable {
 
 	// @Override
 	public void run() {
-		Log.d(TAG, "" + control);
+		Log.d(TAG, "" + function);
 		InputConnection con = myService.getCurrentInputConnection();
 		if (con == null) {
 			return;
 		}
 
-		switch (control) {
+		switch (function) {
 			case Sequencer.UNKNOWN: {
 				String s = myService.getResources().getString(
 						R.string.err_esc_unsupported);
