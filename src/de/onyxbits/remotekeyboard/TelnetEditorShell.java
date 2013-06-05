@@ -3,6 +3,7 @@ package de.onyxbits.remotekeyboard;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import android.content.Context;
@@ -32,23 +33,29 @@ public class TelnetEditorShell implements Shell {
 	private Label content;
 	private BasicTerminalIO m_IO;
 
-	public TelnetEditorShell() {}
+	public TelnetEditorShell() {
+	}
 
 	@Override
-	public void connectionIdle(ConnectionEvent ce) {}
+	public void connectionIdle(ConnectionEvent ce) {
+	}
 
 	@Override
-	public void connectionTimedOut(ConnectionEvent ce) {}
+	public void connectionTimedOut(ConnectionEvent ce) {
+	}
 
 	@Override
-	public void connectionLogoutRequest(ConnectionEvent ce) {}
+	public void connectionLogoutRequest(ConnectionEvent ce) {
+	}
 
 	@Override
-	public void connectionSentBreak(ConnectionEvent ce) {}
-	
+	public void connectionSentBreak(ConnectionEvent ce) {
+	}
+
 	/**
 	 * Disconnect from remote by closing the socket
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	protected void disconnect() throws IOException {
 		m_IO.close();
@@ -91,7 +98,9 @@ public class TelnetEditorShell implements Shell {
 
 			int in;
 			InputAction inputAction = new InputAction();
+			inputAction.myService = RemoteKeyboardService.self;
 			ActionRunner actionRunner = new ActionRunner();
+			Sequencer sequencer = new Sequencer();
 
 			// Main loop starts here
 			while (true) {
@@ -102,17 +111,35 @@ public class TelnetEditorShell implements Shell {
 					break;
 				}
 
-				inputAction.symbol = in;
-				inputAction.sequence = inputAction.buffer[InputAction.getBuffer(in)];
-				inputAction.sequence[0] = (byte) in;
-				for (int i=1;i<inputAction.sequence.length;i++) {
-					inputAction.sequence[i]= (byte) m_IO.read();
+				if (in == TerminalIO.ESCAPE) {
+					// Did we read an escape sequence?
+					in = sequencer.interpret(in);
+					while (in == Sequencer.INCOMPLETE) {
+						in = sequencer.interpret(m_IO.read());
+						if (in == Sequencer.UNKNOWN) {
+							Log.d(TAG,"Unknown: "+Arrays.toString(sequencer.cBuffer));
+							break;
+						}
+					}
 				}
+				else {
+					// It's likely a printable character (potentially UTF8 multi byte).
+					byte[] sequence = sequencer.getBuffer(in);
+					sequence[0] = (byte) in;
+					for (int i = 1; i < sequence.length; i++) {
+						sequence[i] = (byte) m_IO.read();
+					}
+					inputAction.printable = new String(sequence);
+				}
+				
+				// Terminals interpret ASCII control characters and ANSI escape 
+				// sequences, so we have to set this either way.
+				inputAction.control = in;
+				
 				actionRunner.setAction(inputAction);
-				inputAction.myService = RemoteKeyboardService.self;
 				RemoteKeyboardService.self.handler.post(actionRunner);
 				actionRunner.waitResult();
-			}
+			} // End of main loop.
 
 			m_IO.eraseScreen();
 			m_IO.flush();

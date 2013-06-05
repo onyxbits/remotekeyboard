@@ -89,10 +89,6 @@ public abstract class BasicTerminal implements Terminal {
             return TerminalIO.RIGHT;
           case D:
             return TerminalIO.LEFT;
-          case 72: return TerminalIO.RK_HOME;
-          case 70: return TerminalIO.RK_END;
-          case 51: return TerminalIO.RK_DEL;
-          case 50: return TerminalIO.RK_INS;
           default:
             break;
         }

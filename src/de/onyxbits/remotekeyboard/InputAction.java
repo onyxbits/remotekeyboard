@@ -22,23 +22,14 @@ class InputAction implements Runnable {
 	public static final String TAG = "InputAction";
 
 	/**
-	 * What fell out of TerminalIO.read(). This can either be an ASCII character
-	 * or a control character (e.g. TerminalIO.DELETE) or totally meaningless in
-	 * case of a multibyte non-ASCII character (in which case the full UTF-8 byte
-	 * sequence is stored in sequence).
+	 * A control character (anything thats not printable)
 	 */
-	protected int symbol;
-
+	protected int control;
+	
 	/**
-	 * UTF-8 byte sequence, reference to {@link buffer}.
+	 * Printable text to insert (anything thats not a control character).
 	 */
-	protected byte[] sequence;
-
-	/**
-	 * Buffers for reading multibyte characters from an UTF-8 encoded bytestream.
-	 */
-	protected byte[][] buffer = { new byte[1], new byte[2], new byte[3],
-			new byte[4], new byte[5], new byte[6] };
+	protected String printable;
 
 	/**
 	 * For sending raw key presses to the editor
@@ -48,43 +39,16 @@ class InputAction implements Runnable {
 	public InputAction() {
 	}
 
-	/**
-	 * We expect UTF-8 encoded characters. UTF-8 has variable encoding lengths ->
-	 * Determine which buffer size is appropriate.
-	 * 
-	 * @param input
-	 *          the byte that was read from the network and either represents the
-	 *          first byte of an UTF-8 encoded character or a terminal key.
-	 * @return an index into <code>buffer</code>.
-	 */
-	protected static int getBuffer(int input) {
-		// A key like LEFT, RIGHT, etc.
-		if (input > 255)
-			return 0;
-		// SEE: http://en.wikipedia.org/wiki/UTF-8#Description
-		if ((((byte) input) & 252) == 252)
-			return 5;
-		if ((((byte) input) & 248) == 248)
-			return 4;
-		if ((((byte) input) & 240) == 240)
-			return 3;
-		if ((((byte) input) & 224) == 224)
-			return 2;
-		if ((((byte) input) & 192) == 192)
-			return 1;
-		return 0;
-	}
-
 	// @Override
 	public void run() {
-		Log.d(TAG, "" + symbol);
+		Log.d(TAG, "" + control);
 		InputConnection con = myService.getCurrentInputConnection();
 		if (con == null) {
 			return;
 		}
 
-		switch (symbol) {
-			case TerminalIO.UNRECOGNIZED: {
+		switch (control) {
+			case Sequencer.UNKNOWN: {
 				String s = myService.getResources().getString(
 						R.string.err_esc_unsupported);
 				Toast.makeText(myService, s, Toast.LENGTH_SHORT).show();
@@ -107,19 +71,19 @@ class InputAction implements Runnable {
 				typeKey(con,KeyEvent.KEYCODE_ENTER);
 				break;
 			}
-			case TerminalIO.LEFT: {
+			case Sequencer.CURSOR_LEFT: {
 				typeKey(con,KeyEvent.KEYCODE_DPAD_LEFT);
 				break;
 			}
-			case TerminalIO.RIGHT: {
+			case Sequencer.CURSOR_RIGHT: {
 				typeKey(con,KeyEvent.KEYCODE_DPAD_RIGHT);
 				break;
 			}
-			case TerminalIO.UP: {
+			case Sequencer.CURSOR_UP: {
 				typeKey(con,KeyEvent.KEYCODE_DPAD_UP);
 				break;
 			}
-			case TerminalIO.DOWN: {
+			case Sequencer.CURSOR_DOWN: {
 				typeKey(con,KeyEvent.KEYCODE_DPAD_DOWN);
 				break;
 			}
@@ -128,19 +92,19 @@ class InputAction implements Runnable {
 				break;
 			}
 
-			case TerminalIO.RK_HOME: {
+			case Sequencer.HOME: {
 				con.setSelection(0,0);
 				break;
 			}
-			case TerminalIO.RK_INS: {
+			case Sequencer.INSERT: {
 				// Dunno what to do with this one, yet.
 				break;
 			}
-			case TerminalIO.RK_DEL: {
+			case Sequencer.DELETE: {
 				con.deleteSurroundingText(0, 1);
 				break;
 			}
-			case TerminalIO.RK_END: {
+			case Sequencer.END: {
 				ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
 				if (txt != null) {
 					con.setSelection(txt.text.length(),txt.text.length());
@@ -186,7 +150,9 @@ class InputAction implements Runnable {
 			}
 
 			default: {
-				con.commitText(new String(sequence), 1);
+				if (printable!=null) {
+					con.commitText(printable, printable.length());
+				}
 			}
 		}
 	}
