@@ -6,10 +6,10 @@
                  client is configured to send them UTF-8 encoded.
 
 
-
-  CTRL-D	Disconnect
-  CTRL-C	Copy
-  CTRL-V	Paste
-  CTRL-X	Cut
-  CTRL-A	Select All
-  CTRL-L	Send
+	CTRL-C	Copy
+	CTRL-V	Paste
+	CTRL-X	Cut
+	CTRL-A	Select All
+	CTRL-L	Send
+	CTRL-S	Search
+	CTRL-D	Disconnect
