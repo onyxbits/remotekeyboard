@@ -87,7 +87,7 @@ class Sequencer {
 	/**
 	 * Buffer for escape sequences
 	 */
-	private int[] cBuffer = new int[10];
+	private int[] cBuffer = new int[6];
 	
 	/**
 	 * Buffer index (for escape sequences
@@ -136,7 +136,7 @@ class Sequencer {
 				}
 			}
 		}
-		if (index == uBuffer.length) {
+		if (index == cBuffer.length) {
 			return UNKNOWN;
 		}
 		else {
