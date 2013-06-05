@@ -100,24 +100,11 @@ class InputAction implements Runnable {
 				break;
 			}
 			case Sequencer.HOME: {
-				ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
-				if (txt != null) {
-					int pos = txt.text.toString().lastIndexOf('\n', txt.selectionEnd - 1);
-					pos++;
-
-					con.setSelection(pos,pos);
-				}
+				jumpBackward(con,'\n');
 				break;
 			}
 			case Sequencer.END: {
-				ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
-				if (txt != null) {
-					int pos = txt.text.toString().indexOf('\n', txt.selectionEnd);
-		      if (pos == -1) {
-		      	pos = txt.text.length();
-		      }
-					con.setSelection(pos,pos);
-				}
+				jumpForward(con,'\n');
 				break;
 			}
 
@@ -163,6 +150,38 @@ class InputAction implements Runnable {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Place the cursor on the next occurance of a symbol
+	 * @param con driver
+	 * @param symbol the symbol to jump to
+	 */
+	private void jumpForward(InputConnection con, int symbol) {
+		ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
+		if (txt != null) {
+			int pos = txt.text.toString().indexOf(symbol, txt.selectionEnd);
+      if (pos == -1) {
+      	pos = txt.text.length();
+      }
+			con.setSelection(pos,pos);
+		}
+	}
+	
+	/**
+	 * Place the cursor on the last occusrance of a symbol
+	 * @param con driver
+	 * @param symbol the symbol to jump to
+	 */
+	private void jumpBackward(InputConnection con, int symbol) {
+		ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
+		if (txt != null) {
+			int pos = txt.text.toString().lastIndexOf(symbol, txt.selectionEnd - 1);
+			pos++;
+
+			con.setSelection(pos,pos);
+		}
+
 	}
 	
 	/**
