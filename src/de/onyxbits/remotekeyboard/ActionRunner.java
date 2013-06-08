@@ -11,10 +11,10 @@ package de.onyxbits.remotekeyboard;
  */
 class ActionRunner implements Runnable {
 
-	private InputAction action;
+	private Runnable action;
 	private boolean finished;
 
-	protected void setAction(InputAction action) {
+	protected void setAction(Runnable action) {
 		this.action = action;
 		this.finished = false;
 	}

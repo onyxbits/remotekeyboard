@@ -96,46 +96,35 @@ public class TelnetEditorShell implements Shell {
 
 			showText(getWelcomeScreen());
 
-			int in;
-			InputAction inputAction = new InputAction();
-			inputAction.myService = RemoteKeyboardService.self;
+			TextInputAction tia = new TextInputAction(RemoteKeyboardService.self);
+			CtrlInputAction cia = new CtrlInputAction(RemoteKeyboardService.self);
 			ActionRunner actionRunner = new ActionRunner();
-			Sequencer sequencer = new Sequencer();
+			Decoder decoder = new Decoder();
 
 			// Main loop starts here
 			while (true) {
-				in = m_IO.read();
+				int in = m_IO.read();
 				if (in == TerminalIO.IOERROR || in == TerminalIO.HANDLED) {
 					// NOTE: TerminalIO.read() internally transforms LOGOUTREEQUEST
 					// into HANDLED.
 					break;
 				}
 
-				if (in == TerminalIO.ESCAPE) {
-					// Did we read an escape sequence?
-					in = sequencer.interpret(in);
-					while (in == Sequencer.INCOMPLETE) {
-						in = sequencer.interpret(m_IO.read());
-						if (in == Sequencer.UNKNOWN) {
-							break;
-						}
+				switch (decoder.decode(in)) {
+					case Decoder.INCOMPLETE: {
+						continue;
+					}
+					case Decoder.PRINTABLE: {
+						tia.text = decoder.getPrintable();
+						actionRunner.setAction(tia);
+						break;
+					}
+					case Decoder.FUNCTIONCODE: {
+						cia.function = decoder.getFunctionCode();
+						actionRunner.setAction(cia);
+						break;
 					}
 				}
-				else {
-					// It's likely a printable character (potentially UTF8 multi byte).
-					byte[] sequence = sequencer.getBuffer(in);
-					sequence[0] = (byte) in;
-					for (int i = 1; i < sequence.length; i++) {
-						sequence[i] = (byte) m_IO.read();
-					}
-					inputAction.printable = new String(sequence);
-				}
-				
-				// Terminals interpret ASCII control characters and ANSI escape 
-				// sequences, so we have to set this either way.
-				inputAction.function = in;
-				
-				actionRunner.setAction(inputAction);
 				RemoteKeyboardService.self.handler.post(actionRunner);
 				actionRunner.waitResult();
 			} // End of main loop.
@@ -147,7 +136,7 @@ public class TelnetEditorShell implements Shell {
 			// User disconnected disgracefully -> don't care.
 		}
 		catch (IOException e) {
-			//Log.w(TAG, e);
+			// Log.w(TAG, e);
 		}
 		finally {
 			RemoteKeyboardService.self.updateNotification(null);
