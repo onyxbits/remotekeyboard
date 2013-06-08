@@ -3,7 +3,6 @@ package de.onyxbits.remotekeyboard;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import android.content.Context;

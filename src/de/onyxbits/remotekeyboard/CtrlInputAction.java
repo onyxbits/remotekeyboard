@@ -1,7 +1,6 @@
 package de.onyxbits.remotekeyboard;
 
 import net.wimpi.telnetd.io.TerminalIO;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
@@ -37,7 +36,6 @@ class CtrlInputAction implements Runnable {
 
 	// @Override
 	public void run() {
-		// Log.d(TAG, "" + function);
 		InputConnection con = myService.getCurrentInputConnection();
 		if (con == null) {
 			return;
