@@ -94,7 +94,12 @@ class CtrlInputAction implements Runnable {
 				break;
 			}
 			case Decoder.SYM_DELETE: {
-				con.deleteSurroundingText(0, 1);
+				if (con.getSelectedText(0)==null) {
+					con.deleteSurroundingText(0, 1);
+				}
+				else {
+					typeKey(con, KeyEvent.KEYCODE_DEL);
+				}
 				break;
 			}
 			case Decoder.SYM_HOME: {
