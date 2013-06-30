@@ -13,3 +13,4 @@
 	CTRL-L	Send
 	CTRL-S	Search
 	CTRL-D	Disconnect
+	INSERT	Replace word

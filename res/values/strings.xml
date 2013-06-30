@@ -19,5 +19,25 @@
     <string name="notification_peer">Connected to: %1$s</string>
     <string name="err_esc_unsupported">Function not supported, yet</string>
     <string name="app_dumped">Text sent to client</string>
+    <string name="title_activity_filter">FilterActivity</string>
+    <string name="title_activity_replacements_list">Replacements</string>
+    <string name="mi_add_replacement">Add</string>
+    <string name="mi_replacements">Replacements</string>
+    <string name="title_activity_replacement">Replacement Editor</string>
+    <string name="mi_trash">Delete</string>
+    <string name="lbl_shortcut">Shortcut:</string>
+    <string name="lbl_phrase">Phrase:</string>
+    <string name="no_replacements">No substitutions defined. Use the plus symbol to add one.</string>
+    <string name="err_no_replacement">"No substitute known for: %1$s"</string>
+    <string name="mi_clear_list">Clear List</string>
+    <string name="homepage">http://www.onyxbits.de/remotekeyboard</string>
+    <string name="title_confirm">Please confirm</string>
+    <string name="msg_really_delete">Do you really want to remove all entries from the list?</string>
+    <string name="mi_export">Export</string>
+    <string name="mi_import">Import</string>
+    <string name="title_import">Import from URL</string>
+    <string name="err_malformed_url">Malformed URL</string>
+    <string name="err_network_error">Network error</string>
+    <string name="err_corrupt_data">Corrupt data</string>
 
 </resources>

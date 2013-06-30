@@ -3,11 +3,14 @@ package de.onyxbits.remotekeyboard;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.PowerManager;
 import android.util.Log;
 
@@ -31,6 +34,7 @@ public class TelnetEditorShell implements Shell {
 	private Statusbar statusBar;
 	private Label content;
 	private BasicTerminalIO m_IO;
+
 
 	public TelnetEditorShell() {
 	}

@@ -8,6 +8,7 @@ import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.util.HashMap;
 import java.util.Properties;
 
 import net.wimpi.telnetd.BootException;
@@ -17,6 +18,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.inputmethodservice.InputMethodService;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
@@ -32,9 +35,11 @@ public class RemoteKeyboardService extends InputMethodService implements
 		OnKeyboardActionListener {
 
 	public static final String TAG = "RemoteKeyboardService";
+	
+	/**
+	 * For referencing our notification in hte notification area.
+	 */
 	public static final int NOTIFICATION = 42;
-
-	private TelnetD telnetServer;
 
 	/**
 	 * For posting InpuitActions on the UI thread.
@@ -45,6 +50,16 @@ public class RemoteKeyboardService extends InputMethodService implements
 	 * Reference to the running service
 	 */
 	protected static RemoteKeyboardService self;
+	
+	/**
+	 * Contains key/value replacement pairs
+	 */
+	protected HashMap<String, String> replacements;
+	
+	/**
+	 * Reference to the telnetserver instance
+	 */
+	private TelnetD telnetServer;
 
 	@Override
 	public void onStartInputView(EditorInfo info, boolean restarting) {
@@ -68,6 +83,7 @@ public class RemoteKeyboardService extends InputMethodService implements
 			telnetServer.start();
 
 			updateNotification(null);
+			loadReplacements();
 		}
 		catch (IOException e) {
 			Log.w(TAG, e);
@@ -205,4 +221,24 @@ public class RemoteKeyboardService extends InputMethodService implements
 		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notificationManager.notify(NOTIFICATION, builder.build());
 	}
+	
+	/**
+	 * Load the replacements map from the database
+	 */
+	protected void loadReplacements() {
+		HashMap<String,String> tmp = new HashMap<String, String>();
+		SQLiteDatabase database = new Schema(RemoteKeyboardService.self)
+				.getReadableDatabase();
+		String[] columns = { Schema.COLUMN_KEY, Schema.COLUMN_VALUE };
+		Cursor cursor = database.query(Schema.TABLE_REPLACEMENTS, columns, null,
+				null, null, null, null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			tmp.put(cursor.getString(0),cursor.getString(1));
+			cursor.moveToNext();
+		}
+		database.close();
+		replacements = tmp;
+	}
+	
 }
