@@ -13,6 +13,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class ReplacementsListActivity extends ListActivity implements
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		requestWindowFeature(Window.FEATURE_PROGRESS);
 		setContentView(R.layout.replacements_list);
 	}
 
