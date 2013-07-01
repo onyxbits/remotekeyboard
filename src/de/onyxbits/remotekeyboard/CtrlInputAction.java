@@ -134,6 +134,10 @@ class CtrlInputAction implements Runnable {
 				con.performEditorAction(EditorInfo.IME_ACTION_SEND);
 				break;
 			}
+			case 18: { // CTRL-R
+				scramble(con);
+				break;
+			}
 			default: {
 				String s = myService.getResources().getString(
 						R.string.err_esc_unsupported);
@@ -238,5 +242,32 @@ class CtrlInputAction implements Runnable {
 			}
 		}
 		typeKey(con, KeyEvent.KEYCODE_ENTER);
+	}
+	
+	/**
+	 * use ROT13 to scramble the contents of the editor
+	 */
+	private void scramble(InputConnection con) {
+		char[] buffer=null;
+		CharSequence selected = con.getSelectedText(0);
+		if (selected!=null) {
+			buffer=selected.toString().toCharArray();
+		}
+		else {
+			buffer=con.getExtractedText(new ExtractedTextRequest(),0).text.toString().toCharArray();
+			if (buffer.length==0) return;
+		}
+		//char[] buffer = con.getSelectedText(0).toString().toCharArray(); //con.getExtractedText(new ExtractedTextRequest(),0).text.toString().toCharArray();
+		for (int i=0;i<buffer.length;i++) {
+      if       (buffer[i] >= 'a' && buffer[i] <= 'm') buffer[i] += 13;
+      else if  (buffer[i] >= 'A' && buffer[i] <= 'M') buffer[i] += 13;
+      else if  (buffer[i] >= 'n' && buffer[i] <= 'z') buffer[i] -= 13;
+      else if  (buffer[i] >= 'N' && buffer[i] <= 'Z') buffer[i] -= 13;
+		}
+		if (selected==null){
+			con.setComposingRegion(0,buffer.length);
+		}
+		con.setComposingText(new String(buffer),1);
+		con.finishComposingText();
 	}
 }

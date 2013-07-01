@@ -12,5 +12,6 @@
 	CTRL-A	Select All
 	CTRL-L	Send
 	CTRL-S	Search
+	CTRL-R	ROT13 Scramble
 	CTRL-D	Disconnect
 	INSERT	Replace word
