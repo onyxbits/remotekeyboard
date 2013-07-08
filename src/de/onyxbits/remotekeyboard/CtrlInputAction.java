@@ -118,24 +118,28 @@ class CtrlInputAction implements Runnable {
 				con.performContextMenuAction(android.R.id.copy);
 				break;
 			}
-			case 22: { // CTRL-V
-				con.performContextMenuAction(android.R.id.paste);
-				break;
-			}
-			case 24: { // CTRL-X
-				con.performContextMenuAction(android.R.id.cut);
-				break;
-			}
-			case 19: { // CTRL-S
-				con.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
-				break;
-			}
 			case 12: { // CTRL-L
 				con.performEditorAction(EditorInfo.IME_ACTION_SEND);
 				break;
 			}
 			case 18: { // CTRL-R
 				scramble(con);
+				break;
+			}
+			case 17: { //CTRL-Q
+				typeKey(con,KeyEvent.KEYCODE_BACK);
+				break;
+			}
+			case 19: { // CTRL-S
+				con.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
+				break;
+			}
+			case 22: { // CTRL-V
+				con.performContextMenuAction(android.R.id.paste);
+				break;
+			}
+			case 24: { // CTRL-X
+				con.performContextMenuAction(android.R.id.cut);
 				break;
 			}
 			default: {
