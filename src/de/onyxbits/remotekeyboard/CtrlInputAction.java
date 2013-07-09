@@ -1,6 +1,7 @@
 package de.onyxbits.remotekeyboard;
 
 import net.wimpi.telnetd.io.TerminalIO;
+import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
@@ -79,6 +80,22 @@ class CtrlInputAction implements Runnable {
 				typeKey(con, KeyEvent.KEYCODE_DPAD_DOWN);
 				break;
 			}
+			case Decoder.SYM_SHIFT_CURSOR_LEFT: {
+				markText(con,KeyEvent.KEYCODE_DPAD_LEFT);
+				break;
+			}
+			case Decoder.SYM_SHIFT_CURSOR_RIGHT: {
+				markText(con,KeyEvent.KEYCODE_DPAD_RIGHT);
+				break;
+			}
+			case Decoder.SYM_SHIFT_CURSOR_UP: {
+				markText(con,KeyEvent.KEYCODE_DPAD_UP);
+				break;
+			}
+			case Decoder.SYM_SHIFT_CURSOR_DOWN: {
+				markText(con,KeyEvent.KEYCODE_DPAD_DOWN);
+				break;
+			}
 			case Decoder.SYM_CTRL_CURSOR_LEFT: {
 				jumpBackward(con, ' ');
 				break;
@@ -126,8 +143,8 @@ class CtrlInputAction implements Runnable {
 				scramble(con);
 				break;
 			}
-			case 17: { //CTRL-Q
-				typeKey(con,KeyEvent.KEYCODE_BACK);
+			case 17: { // CTRL-Q
+				typeKey(con, KeyEvent.KEYCODE_BACK);
 				break;
 			}
 			case 19: { // CTRL-S
@@ -149,6 +166,19 @@ class CtrlInputAction implements Runnable {
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Mark text using SHIFT+DPAD
+	 * @param con input connection
+	 * @param keycode DPAD keycode
+	 */
+	private void markText(InputConnection con, int keycode) {
+		long now = SystemClock.uptimeMillis();
+		con.sendKeyEvent(new KeyEvent(now,now,KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_SHIFT_LEFT,0,0));
+		con.sendKeyEvent(new KeyEvent(now,now,KeyEvent.ACTION_DOWN,keycode,0,KeyEvent.META_SHIFT_LEFT_ON));
+		con.sendKeyEvent(new KeyEvent(now,now,KeyEvent.ACTION_UP,keycode,0,KeyEvent.META_SHIFT_LEFT_ON));
+		con.sendKeyEvent(new KeyEvent(now,now,KeyEvent.ACTION_UP,KeyEvent.KEYCODE_SHIFT_LEFT,0,0));
 	}
 
 	/**

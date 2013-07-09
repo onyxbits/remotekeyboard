@@ -71,6 +71,10 @@ class Decoder {
 			{ SYM_PAGE_UP, '[', '6', '~' },
 			{ SYM_CTRL_CURSOR_LEFT, '[', '1', ';', '5', 'D' },
 			{ SYM_CTRL_CURSOR_RIGHT, '[', '1', ';', '5', 'C' },
+			{ SYM_SHIFT_CURSOR_UP, '[','1',';','2','A'},
+			{ SYM_SHIFT_CURSOR_DOWN, '[','1',';','2','B'},
+			{ SYM_SHIFT_CURSOR_RIGHT, '[','1',';','2','C'},
+			{ SYM_SHIFT_CURSOR_LEFT, '[','1',';','2','D'},
 	};
 
 	/**
