@@ -17,7 +17,7 @@
     <string name="terminal_title">Android Remote Keyboard</string>
     <string name="terminal_statusbar">Status: Connected</string>
     <string name="notification_peer">Connected to: %1$s</string>
-    <string name="app_dumped">Text sent to client</string>
+    <string name="msg_sent">Text sent to client</string>
     <string name="title_activity_filter">FilterActivity</string>
     <string name="title_activity_replacements_list">Replacements</string>
     <string name="mi_add_replacement">Add</string>

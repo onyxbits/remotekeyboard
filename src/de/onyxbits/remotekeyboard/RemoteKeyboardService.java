@@ -145,7 +145,7 @@ public class RemoteKeyboardService extends InputMethodService implements
 								new ExtractedTextRequest(), 0).text;
 					}
 					TelnetEditorShell.self.showText(txt + "");
-					Toast.makeText(this, R.string.app_dumped, Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, R.string.msg_sent, Toast.LENGTH_SHORT).show();
 				}
 				catch (Exception exp) {
 					Toast.makeText(this, R.string.err_noclient, Toast.LENGTH_SHORT)

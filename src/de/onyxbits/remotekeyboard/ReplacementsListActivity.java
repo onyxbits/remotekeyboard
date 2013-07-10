@@ -157,7 +157,7 @@ public class ReplacementsListActivity extends ListActivity implements
 		}
 		JSONObject json = new JSONObject(RemoteKeyboardService.self.replacements);
 		TelnetEditorShell.self.showText(json.toString());
-		Toast.makeText(this, R.string.app_dumped, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, R.string.msg_sent, Toast.LENGTH_SHORT).show();
 	}
 
 }
