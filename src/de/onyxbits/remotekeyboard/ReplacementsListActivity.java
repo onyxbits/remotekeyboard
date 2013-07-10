@@ -151,7 +151,7 @@ public class ReplacementsListActivity extends ListActivity implements
 	 */
 	private void doExport() {
 		if (TelnetEditorShell.self == null) {
-			Toast.makeText(this, R.string.err_sendtonirvana, Toast.LENGTH_SHORT)
+			Toast.makeText(this, R.string.err_noclient, Toast.LENGTH_SHORT)
 					.show();
 			return;
 		}

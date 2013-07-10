@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Remote Keyboard</string>
-    <string name="err_sendtonirvana">No client connected!</string>
+    <string name="err_noclient">No client connected!</string>
     <string name="notification_title">Android Remote Keyboard</string>
     <string name="notification_waiting">Waiting for connections (touch for details)</string>
     <string name="title_activity_main">MainActivity</string>
@@ -39,6 +39,5 @@
     <string name="err_network_error">Network error</string>
     <string name="err_corrupt_data">Corrupt data</string>
     <string name="msg_client_disconnected">Client disconnected</string>
-    <string name="err_no_client_to_disconnect">No client to disconnect</string>
 
 </resources>

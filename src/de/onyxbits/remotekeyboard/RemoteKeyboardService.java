@@ -148,7 +148,7 @@ public class RemoteKeyboardService extends InputMethodService implements
 					Toast.makeText(this, R.string.app_dumped, Toast.LENGTH_SHORT).show();
 				}
 				catch (Exception exp) {
-					Toast.makeText(this, R.string.err_sendtonirvana, Toast.LENGTH_SHORT)
+					Toast.makeText(this, R.string.err_noclient, Toast.LENGTH_SHORT)
 							.show();
 				}
 				break;
@@ -160,7 +160,7 @@ public class RemoteKeyboardService extends InputMethodService implements
 					Toast.makeText(this, R.string.msg_client_disconnected, Toast.LENGTH_SHORT).show();
 					}
 					else{
-						Toast.makeText(this, R.string.err_no_client_to_disconnect, Toast.LENGTH_SHORT).show();
+						Toast.makeText(this, R.string.err_noclient, Toast.LENGTH_SHORT).show();
 					}
 				}
 				catch (Exception e) {
