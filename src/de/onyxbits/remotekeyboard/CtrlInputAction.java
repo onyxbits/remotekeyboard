@@ -159,12 +159,6 @@ class CtrlInputAction implements Runnable {
 				con.performContextMenuAction(android.R.id.cut);
 				break;
 			}
-			default: {
-				String s = myService.getResources().getString(
-						R.string.err_esc_unsupported);
-				Toast.makeText(myService, s, Toast.LENGTH_SHORT).show();
-				break;
-			}
 		}
 	}
 
