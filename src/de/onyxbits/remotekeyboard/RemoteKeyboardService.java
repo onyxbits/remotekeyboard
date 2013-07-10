@@ -155,7 +155,13 @@ public class RemoteKeyboardService extends InputMethodService implements
 			}
 			case 3: {
 				try {
+					if (TelnetEditorShell.self!=null){
 					TelnetEditorShell.self.disconnect();
+					Toast.makeText(this, R.string.msg_client_disconnected, Toast.LENGTH_SHORT).show();
+					}
+					else{
+						Toast.makeText(this, R.string.err_no_client_to_disconnect, Toast.LENGTH_SHORT).show();
+					}
 				}
 				catch (Exception e) {
 

@@ -38,5 +38,7 @@
     <string name="err_malformed_url">Malformed URL</string>
     <string name="err_network_error">Network error</string>
     <string name="err_corrupt_data">Corrupt data</string>
+    <string name="msg_client_disconnected">Client disconnected</string>
+    <string name="err_no_client_to_disconnect">No client to disconnect</string>
 
 </resources>
