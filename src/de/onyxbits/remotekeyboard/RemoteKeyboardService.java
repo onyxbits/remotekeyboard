@@ -37,7 +37,7 @@ public class RemoteKeyboardService extends InputMethodService implements
 	public static final String TAG = "RemoteKeyboardService";
 	
 	/**
-	 * For referencing our notification in hte notification area.
+	 * For referencing our notification in the notification area.
 	 */
 	public static final int NOTIFICATION = 42;
 
