@@ -100,6 +100,7 @@ public class RemoteKeyboardService extends InputMethodService implements
 		KeyboardView ret = new KeyboardView(this, null);
 		ret.setKeyboard(new Keyboard(this, R.xml.keyboarddef));
 		ret.setOnKeyboardActionListener(this);
+		ret.setPreviewEnabled(false);
 		return ret;
 	}
 
