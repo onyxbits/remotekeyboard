@@ -283,8 +283,11 @@ class CtrlInputAction implements Runnable {
 			buffer = selected.toString().toCharArray();
 		}
 		else {
-			buffer = con.getExtractedText(new ExtractedTextRequest(), 0).text
-					.toString().toCharArray();
+			ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
+			if (txt==null) {
+				return;
+			}
+			buffer = txt.text.toString().toCharArray();
 			if (buffer.length == 0)
 				return;
 		}
