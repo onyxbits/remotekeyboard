@@ -148,7 +148,8 @@ class CtrlInputAction implements Runnable {
 				break;
 			}
 			case 19: { // CTRL-S
-				con.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
+				//con.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
+				typeKey(con,KeyEvent.KEYCODE_SEARCH);
 				break;
 			}
 			case 22: { // CTRL-V
