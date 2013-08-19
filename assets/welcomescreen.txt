@@ -10,9 +10,9 @@
 	CTRL-V	Paste
 	CTRL-X	Cut
 	CTRL-A	Select All
-	CTRL-L	Send
-	CTRL-S	Search
-	CTRL-R	ROT13 Scramble
-	CTRL-D	Disconnect
-	CTRL-Q	Back
-	INSERT	Replace word
+	CTRL-L	Send action  
+	CTRL-S	Search key
+	CTRL-Q	Back key
+	CTRL-D	Disconnect from device
+	CTRL-R	(Un-)Scramble text using ROT13
+	INSERT	Substitute current word with a replacement.
