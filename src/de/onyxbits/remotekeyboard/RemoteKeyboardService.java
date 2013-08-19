@@ -35,7 +35,7 @@ public class RemoteKeyboardService extends InputMethodService implements
 		OnKeyboardActionListener {
 
 	public static final String TAG = "RemoteKeyboardService";
-	
+
 	/**
 	 * For referencing our notification in the notification area.
 	 */
@@ -50,12 +50,12 @@ public class RemoteKeyboardService extends InputMethodService implements
 	 * Reference to the running service
 	 */
 	protected static RemoteKeyboardService self;
-	
+
 	/**
 	 * Contains key/value replacement pairs
 	 */
 	protected HashMap<String, String> replacements;
-	
+
 	/**
 	 * Reference to the telnetserver instance
 	 */
@@ -154,12 +154,14 @@ public class RemoteKeyboardService extends InputMethodService implements
 			}
 			case 3: {
 				try {
-					if (TelnetEditorShell.self!=null){
-					TelnetEditorShell.self.disconnect();
-					Toast.makeText(this, R.string.msg_client_disconnected, Toast.LENGTH_SHORT).show();
+					if (TelnetEditorShell.self != null) {
+						TelnetEditorShell.self.disconnect();
+						Toast.makeText(this, R.string.msg_client_disconnected,
+								Toast.LENGTH_SHORT).show();
 					}
-					else{
-						Toast.makeText(this, R.string.err_noclient, Toast.LENGTH_SHORT).show();
+					else {
+						Toast.makeText(this, R.string.err_noclient, Toast.LENGTH_SHORT)
+								.show();
 					}
 				}
 				catch (Exception e) {
@@ -226,12 +228,12 @@ public class RemoteKeyboardService extends InputMethodService implements
 		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notificationManager.notify(NOTIFICATION, builder.build());
 	}
-	
+
 	/**
 	 * Load the replacements map from the database
 	 */
 	protected void loadReplacements() {
-		HashMap<String,String> tmp = new HashMap<String, String>();
+		HashMap<String, String> tmp = new HashMap<String, String>();
 		SQLiteDatabase database = new Schema(RemoteKeyboardService.self)
 				.getReadableDatabase();
 		String[] columns = { Schema.COLUMN_KEY, Schema.COLUMN_VALUE };
@@ -239,11 +241,11 @@ public class RemoteKeyboardService extends InputMethodService implements
 				null, null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			tmp.put(cursor.getString(0),cursor.getString(1));
+			tmp.put(cursor.getString(0), cursor.getString(1));
 			cursor.moveToNext();
 		}
 		database.close();
 		replacements = tmp;
 	}
-	
+
 }
