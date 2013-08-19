@@ -43,18 +43,22 @@ public class TelnetEditorShell implements Shell {
 
 	@Override
 	public void connectionIdle(ConnectionEvent ce) {
+		// NOTE: not used -> no connectionlistener registered
 	}
 
 	@Override
 	public void connectionTimedOut(ConnectionEvent ce) {
+		// NOTE: not used -> no connectionlistener registered
 	}
 
 	@Override
 	public void connectionLogoutRequest(ConnectionEvent ce) {
+		// NOTE: not used -> no connectionlistener registered
 	}
 
 	@Override
 	public void connectionSentBreak(ConnectionEvent ce) {
+		// NOTE: not used -> no connectionlistener registered
 	}
 
 	/**
@@ -185,6 +189,7 @@ public class TelnetEditorShell implements Shell {
 			} // End of main loop.
 
 			m_IO.eraseScreen();
+			m_IO.write("\n");
 			m_IO.flush();
 		}
 		catch (EOFException e) {
