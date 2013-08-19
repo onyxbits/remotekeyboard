@@ -100,6 +100,7 @@ public class MainActivity extends Activity implements
 			}
 			case R.id.item_password: {
 				pwdfield = new EditText(this);
+				pwdfield.setSingleLine(true);
 				SharedPreferences sharedPref = PreferenceManager
 						.getDefaultSharedPreferences(this);
 				pwdfield.setText(sharedPref.getString(TelnetEditorShell.PREF_PASSCODE,

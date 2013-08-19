@@ -224,7 +224,7 @@ public class RemoteKeyboardService extends InputMethodService implements
 				.setContentIntent(
 						PendingIntent.getActivity(this, 0, new Intent(this,
 								MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
-				.setSmallIcon(R.drawable.ic_action_selectime);
+				.setSmallIcon(R.drawable.ic_server);
 		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notificationManager.notify(NOTIFICATION, builder.build());
 	}
