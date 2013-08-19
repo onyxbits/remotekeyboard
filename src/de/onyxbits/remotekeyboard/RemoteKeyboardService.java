@@ -42,7 +42,7 @@ public class RemoteKeyboardService extends InputMethodService implements
 	public static final int NOTIFICATION = 42;
 
 	/**
-	 * For posting InpuitActions on the UI thread.
+	 * For posting InputActions on the UI thread.
 	 */
 	protected Handler handler;
 
