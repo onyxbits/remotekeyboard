@@ -1,5 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/item_select" android:title="@string/mi_select" android:showAsAction="ifRoom"></item><item android:id="@+id/item_replacements" android:title="@string/mi_replacements"></item><item android:id="@+id/item_help" android:title="@string/mi_help"></item>
+    <item android:id="@+id/item_select" android:title="@string/mi_select" android:showAsAction="ifRoom"></item><item android:id="@+id/item_passcode" android:title="@string/mi_passcode"></item><item android:id="@+id/item_replacements" android:title="@string/mi_replacements"></item><item android:id="@+id/item_help" android:title="@string/mi_help"></item>
+    
     
     
     

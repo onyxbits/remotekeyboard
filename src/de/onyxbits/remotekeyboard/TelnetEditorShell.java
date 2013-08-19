@@ -3,15 +3,16 @@ package de.onyxbits.remotekeyboard;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Scanner;
 
+import org.apache.http.auth.AuthenticationException;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import net.wimpi.telnetd.io.BasicTerminalIO;
@@ -27,6 +28,8 @@ import net.wimpi.telnetd.shell.Shell;
 public class TelnetEditorShell implements Shell {
 
 	public static final String TAG = "TelnetEditorShell";
+	
+	public static final String PREF_PASSCODE="passcode";
 
 	protected static TelnetEditorShell self;
 
@@ -34,7 +37,6 @@ public class TelnetEditorShell implements Shell {
 	private Statusbar statusBar;
 	private Label content;
 	private BasicTerminalIO m_IO;
-
 
 	public TelnetEditorShell() {
 	}
@@ -81,7 +83,58 @@ public class TelnetEditorShell implements Shell {
 				.getInetAddress());
 
 		try {
-			// Make the terminal window look pretty/informative.
+			Decoder decoder = new Decoder();
+
+			// Password loop starts here
+			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(RemoteKeyboardService.self);
+			String passwd = sharedPref.getString(PREF_PASSCODE, "");
+			boolean unauthenticated = passwd.length() > 0;
+			int idx = 0;
+			boolean[] pwdbuf = null;
+			if (unauthenticated) {
+				pwdbuf = new boolean[passwd.length()];
+				m_IO.write(res.getString(R.string.passcode));
+				m_IO.flush();
+			}
+
+			while (unauthenticated) {
+				int in = m_IO.read();
+
+				switch (decoder.decode(in)) {
+					case Decoder.PRINTABLE: {
+						if (idx < pwdbuf.length) {
+							pwdbuf[idx] = passwd.charAt(idx) == decoder.getPrintable()
+									.charAt(0);
+						}
+						idx++;
+						break;
+					}
+					case Decoder.FUNCTIONCODE: {
+						// See: CtrlInputAction for the comments in \n and DELETE!
+						if (decoder.getFunctionCode() == TerminalIO.DELETE && idx > 0) {
+							idx--;
+						}
+						if (decoder.getFunctionCode() == '\n') {
+							for (int i = 0; i < pwdbuf.length; i++) {
+								if (!pwdbuf[i]) {
+									m_IO.write("\n");
+									m_IO.flush();
+									throw new AuthenticationException();
+								}
+							}
+							if (idx != pwdbuf.length) {
+								m_IO.write("\n");
+								m_IO.flush();
+								throw new AuthenticationException();
+							}
+							unauthenticated = false; // Password is an exact match
+						}
+						break;
+					}
+				}
+			}
+
+			// Make the terminal window look pretty/informative after logging in.
 			titleBar = new Titlebar(m_IO, "titlebar");
 			titleBar.setTitleText(res.getString(R.string.terminal_title));
 			titleBar.setAlignment(Titlebar.ALIGN_LEFT);
@@ -102,7 +155,6 @@ public class TelnetEditorShell implements Shell {
 			TextInputAction tia = new TextInputAction(RemoteKeyboardService.self);
 			CtrlInputAction cia = new CtrlInputAction(RemoteKeyboardService.self);
 			ActionRunner actionRunner = new ActionRunner();
-			Decoder decoder = new Decoder();
 
 			// Main loop starts here
 			while (true) {
@@ -140,6 +192,18 @@ public class TelnetEditorShell implements Shell {
 		}
 		catch (IOException e) {
 			// Log.w(TAG, e);
+		}
+		catch (AuthenticationException e) {
+			Log.w(TAG, "Wrong password: " + con.getConnectionData().getHostAddress());
+			try {
+				Thread.sleep(2000);
+			}
+			catch (InterruptedException exp) {
+			}
+		}
+		catch (Exception e) {
+			// Shouldn't happen, but the method is complex -> better safe than sorry.
+			Log.w(TAG, e);
 		}
 		finally {
 			RemoteKeyboardService.self.updateNotification(null);
