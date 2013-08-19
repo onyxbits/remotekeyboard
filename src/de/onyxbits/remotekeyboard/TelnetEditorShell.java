@@ -258,6 +258,9 @@ public class TelnetEditorShell implements Shell {
 	}
 
 	public static Shell createShell() {
+		if (self!=null) {
+			return new DummyShell();
+		}
 		self = new TelnetEditorShell();
 		return self;
 	}
