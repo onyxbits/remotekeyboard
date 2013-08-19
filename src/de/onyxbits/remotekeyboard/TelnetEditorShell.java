@@ -97,7 +97,7 @@ public class TelnetEditorShell implements Shell {
 			boolean[] pwdbuf = null;
 			if (unauthenticated) {
 				pwdbuf = new boolean[passwd.length()];
-				m_IO.write(res.getString(R.string.passcode));
+				m_IO.write(res.getString(R.string.password));
 				m_IO.flush();
 			}
 

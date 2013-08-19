@@ -39,7 +39,7 @@
     <string name="err_network_error">Network error</string>
     <string name="err_corrupt_data">Corrupt data</string>
     <string name="msg_client_disconnected">Client disconnected</string>
-    <string name="passcode">Passcode:</string>
-    <string name="mi_passcode">Set Passcode</string>
+    <string name="password">Password:</string>
+    <string name="mi_password">Set Password</string>
 
 </resources>

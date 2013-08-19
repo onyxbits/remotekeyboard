@@ -98,14 +98,14 @@ public class MainActivity extends Activity implements
 				imm.showInputMethodPicker();
 				break;
 			}
-			case R.id.item_passcode: {
+			case R.id.item_password: {
 				pwdfield = new EditText(this);
 				SharedPreferences sharedPref = PreferenceManager
 						.getDefaultSharedPreferences(this);
 				pwdfield.setText(sharedPref.getString(TelnetEditorShell.PREF_PASSCODE,
 						""));
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(R.string.passcode).setView(pwdfield)
+				builder.setTitle(R.string.password).setView(pwdfield)
 						.setPositiveButton(android.R.string.yes, this)
 						.setNegativeButton(android.R.string.no, this).create().show();
 
