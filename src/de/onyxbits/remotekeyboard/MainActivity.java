@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements
 		DialogInterface.OnClickListener {
@@ -70,6 +71,19 @@ public class MainActivity extends Activity implements
 					.setPositiveButton(android.R.string.yes, this)
 					.setNegativeButton(android.R.string.no, this).create().show();
 
+		}
+		
+		String shared = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+		if (available && shared!=null) {
+			tv = (TextView) findViewById(R.id.typetest);
+			tv.setText(shared);
+			if (TelnetEditorShell.self!=null) {
+				TelnetEditorShell.self.showText(shared);
+				Toast.makeText(this,R.string.msg_sent,Toast.LENGTH_SHORT).show();
+			}
+			else {
+				Toast.makeText(this,R.string.err_noclient,Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 
