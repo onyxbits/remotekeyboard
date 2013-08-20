@@ -67,6 +67,8 @@ public class TelnetEditorShell implements Shell {
 	 * @throws IOException
 	 */
 	protected void disconnect() throws IOException {
+		m_IO.write("\n");
+		m_IO.flush();
 		m_IO.close();
 	}
 
