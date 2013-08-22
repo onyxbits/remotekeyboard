@@ -77,8 +77,8 @@
             android:label="@string/title_activity_replacement" >
         </activity>
         <activity
-            android:name="de.onyxbits.remotekeyboard.QuicklauncherActivity"
-            android:label="@string/title_activity_quicklauncher" >
+            android:name="de.onyxbits.remotekeyboard.SettingsActivity"
+            android:label="@string/title_activity_settings" >
         </activity>
     </application>
 

@@ -28,7 +28,6 @@ public class MainActivity extends Activity implements
 
 	public static String TAG = "MainActivity";
 
-	private EditText pwdfield;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,17 +71,17 @@ public class MainActivity extends Activity implements
 					.setNegativeButton(android.R.string.no, this).create().show();
 
 		}
-		
+
 		String shared = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-		if (available && shared!=null) {
+		if (available && shared != null) {
 			tv = (TextView) findViewById(R.id.typetest);
 			tv.setText(shared);
-			if (TelnetEditorShell.self!=null) {
+			if (TelnetEditorShell.self != null) {
 				TelnetEditorShell.self.showText(shared);
-				Toast.makeText(this,R.string.msg_sent,Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.msg_sent, Toast.LENGTH_SHORT).show();
 			}
 			else {
-				Toast.makeText(this,R.string.err_noclient,Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.err_noclient, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -107,27 +106,13 @@ public class MainActivity extends Activity implements
 				startActivity(new Intent(this, ReplacementsListActivity.class));
 				break;
 			}
-			case R.id.item_quicklaunchers: {
-				startActivity(new Intent(this, QuicklauncherActivity.class));
+			case R.id.item_settings: {
+				startActivity(new Intent(this, SettingsActivity.class));
 				break;
 			}
 			case R.id.item_select: {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.showInputMethodPicker();
-				break;
-			}
-			case R.id.item_password: {
-				pwdfield = new EditText(this);
-				pwdfield.setSingleLine(true);
-				SharedPreferences sharedPref = PreferenceManager
-						.getDefaultSharedPreferences(this);
-				pwdfield.setText(sharedPref.getString(TelnetEditorShell.PREF_PASSCODE,
-						""));
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(R.string.password).setView(pwdfield)
-						.setPositiveButton(android.R.string.yes, this)
-						.setNegativeButton(android.R.string.no, this).create().show();
-
 				break;
 			}
 		}
@@ -136,24 +121,10 @@ public class MainActivity extends Activity implements
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-		if (pwdfield != null) {
-			// We are called from the Password change dialog
-			if (which == DialogInterface.BUTTON_POSITIVE) {
-				SharedPreferences sharedPref = PreferenceManager
-						.getDefaultSharedPreferences(this);
-				sharedPref
-						.edit()
-						.putString(TelnetEditorShell.PREF_PASSCODE,
-								pwdfield.getText().toString()).apply();
-			}
-			pwdfield = null;
-		}
-		else {
-			// We are called from the RK is not enabled as IME method.
-			if (which == DialogInterface.BUTTON_POSITIVE) {
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS));
-			}
+		// We are called from the RK is not enabled as IME method.
+		if (which == DialogInterface.BUTTON_POSITIVE) {
+			startActivity(new Intent(
+					android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS));
 		}
 	}
 

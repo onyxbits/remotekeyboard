@@ -43,7 +43,7 @@
     <string name="mi_password">Set Password</string>
     <string name="err_quicklauncher_not_assigned">Nothing assigned to this quicklauncer</string>
     <string name="err_quicklauncher_failed">Failed to launch activity</string>
-    <string name="title_activity_quicklauncher">Quick Launcher Settings</string>
+    <string name="title_activity_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="mi_quicklaunchers">Quicklaunchers</string>
     <string name="title_select_app">Select App to launch</string>
@@ -59,6 +59,13 @@
     <string name="pref_title_f10">F10 will launch:</string>
     <string name="pref_title_f11">F11 will launch:</string>
     <string name="pref_title_f12">F12 will launch:</string>
+    <string name="mi_settings">Settings</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_header_quicklaunchers">Quicklaunchers</string>
+    <string name="msg_password_set">Password set</string>
+    <string name="msg_password_not_set">Password not set</string>
+    <string name="pref_title_password">Password protection</string>
+    <string name="title_set_password">Set password</string>
     
 
 </resources>

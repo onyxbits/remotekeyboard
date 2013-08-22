@@ -29,7 +29,7 @@ public class TelnetEditorShell implements Shell {
 
 	public static final String TAG = "TelnetEditorShell";
 	
-	public static final String PREF_PASSCODE="passcode";
+	public static final String PREF_PASSWORD="pref_password";
 
 	protected static TelnetEditorShell self;
 
@@ -93,7 +93,7 @@ public class TelnetEditorShell implements Shell {
 
 			// Password loop starts here
 			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(RemoteKeyboardService.self);
-			String passwd = sharedPref.getString(PREF_PASSCODE, "");
+			String passwd = sharedPref.getString(PREF_PASSWORD, "");
 			boolean unauthenticated = passwd.length() > 0;
 			int idx = 0;
 			boolean[] pwdbuf = null;
