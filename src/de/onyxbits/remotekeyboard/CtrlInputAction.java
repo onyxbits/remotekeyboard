@@ -1,7 +1,11 @@
 package de.onyxbits.remotekeyboard;
 
 import net.wimpi.telnetd.io.TerminalIO;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 class CtrlInputAction implements Runnable {
 
 	public static final String TAG = "InputAction";
+	public static final String PREF_QUICKLAUNCHER="pref_quicklauncher";
 
 	/**
 	 * A control character (anything thats not printable)
@@ -81,19 +86,19 @@ class CtrlInputAction implements Runnable {
 				break;
 			}
 			case Decoder.SYM_SHIFT_CURSOR_LEFT: {
-				markText(con,KeyEvent.KEYCODE_DPAD_LEFT);
+				markText(con, KeyEvent.KEYCODE_DPAD_LEFT);
 				break;
 			}
 			case Decoder.SYM_SHIFT_CURSOR_RIGHT: {
-				markText(con,KeyEvent.KEYCODE_DPAD_RIGHT);
+				markText(con, KeyEvent.KEYCODE_DPAD_RIGHT);
 				break;
 			}
 			case Decoder.SYM_SHIFT_CURSOR_UP: {
-				markText(con,KeyEvent.KEYCODE_DPAD_UP);
+				markText(con, KeyEvent.KEYCODE_DPAD_UP);
 				break;
 			}
 			case Decoder.SYM_SHIFT_CURSOR_DOWN: {
-				markText(con,KeyEvent.KEYCODE_DPAD_DOWN);
+				markText(con, KeyEvent.KEYCODE_DPAD_DOWN);
 				break;
 			}
 			case Decoder.SYM_CTRL_CURSOR_LEFT: {
@@ -148,8 +153,8 @@ class CtrlInputAction implements Runnable {
 				break;
 			}
 			case 19: { // CTRL-S
-				//con.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
-				typeKey(con,KeyEvent.KEYCODE_SEARCH);
+				// con.performEditorAction(EditorInfo.IME_ACTION_SEARCH);
+				typeKey(con, KeyEvent.KEYCODE_SEARCH);
 				break;
 			}
 			case 22: { // CTRL-V
@@ -160,20 +165,69 @@ class CtrlInputAction implements Runnable {
 				con.performContextMenuAction(android.R.id.cut);
 				break;
 			}
+
+			case Decoder.SYM_F1:
+			case Decoder.SYM_F2:
+			case Decoder.SYM_F3:
+			case Decoder.SYM_F4:
+			case Decoder.SYM_F5:
+			case Decoder.SYM_F6:
+			case Decoder.SYM_F7:
+			case Decoder.SYM_F8:
+			case Decoder.SYM_F9:
+			case Decoder.SYM_F10:
+			case Decoder.SYM_F11:
+			case Decoder.SYM_F12: {
+				launchActivity(function);
+				break;
+			}
+
 		}
 	}
 
 	/**
+	 * Start an activity on speeddial
+	 * @param function function code.
+	 */
+	private void launchActivity(int function) {
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(RemoteKeyboardService.self);
+		String target = sharedPref.getString(PREF_QUICKLAUNCHER+"."+function, "");
+		if (target.equals("")) {
+			Toast.makeText(RemoteKeyboardService.self, R.string.err_quicklauncher_not_assigned,
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+		try {
+			RemoteKeyboardService.self.startActivity(RemoteKeyboardService.self
+					.getPackageManager().getLaunchIntentForPackage(target));
+
+		}
+		catch (Exception exp) {
+			Toast.makeText(RemoteKeyboardService.self, R.string.err_quicklauncher_failed,
+					Toast.LENGTH_SHORT).show();
+			Log.w(TAG, exp);
+		}
+
+	}
+
+	/**
 	 * Mark text using SHIFT+DPAD
-	 * @param con input connection
-	 * @param keycode DPAD keycode
+	 * 
+	 * @param con
+	 *          input connection
+	 * @param keycode
+	 *          DPAD keycode
 	 */
 	private void markText(InputConnection con, int keycode) {
 		long now = SystemClock.uptimeMillis();
-		con.sendKeyEvent(new KeyEvent(now,now,KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_SHIFT_LEFT,0,0));
-		con.sendKeyEvent(new KeyEvent(now,now,KeyEvent.ACTION_DOWN,keycode,0,KeyEvent.META_SHIFT_LEFT_ON));
-		con.sendKeyEvent(new KeyEvent(now,now,KeyEvent.ACTION_UP,keycode,0,KeyEvent.META_SHIFT_LEFT_ON));
-		con.sendKeyEvent(new KeyEvent(now,now,KeyEvent.ACTION_UP,KeyEvent.KEYCODE_SHIFT_LEFT,0,0));
+		con.sendKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_DOWN,
+				KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0));
+		con.sendKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_DOWN, keycode, 0,
+				KeyEvent.META_SHIFT_LEFT_ON));
+		con.sendKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_UP, keycode, 0,
+				KeyEvent.META_SHIFT_LEFT_ON));
+		con.sendKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_UP,
+				KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0));
 	}
 
 	/**
@@ -285,7 +339,7 @@ class CtrlInputAction implements Runnable {
 		}
 		else {
 			ExtractedText txt = con.getExtractedText(new ExtractedTextRequest(), 0);
-			if (txt==null) {
+			if (txt == null) {
 				return;
 			}
 			buffer = txt.text.toString().toCharArray();

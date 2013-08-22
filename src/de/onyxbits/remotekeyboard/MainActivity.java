@@ -107,6 +107,10 @@ public class MainActivity extends Activity implements
 				startActivity(new Intent(this, ReplacementsListActivity.class));
 				break;
 			}
+			case R.id.item_quicklaunchers: {
+				startActivity(new Intent(this, QuicklauncherActivity.class));
+				break;
+			}
 			case R.id.item_select: {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.showInputMethodPicker();

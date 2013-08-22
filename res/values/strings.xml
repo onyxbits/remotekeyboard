@@ -41,5 +41,24 @@
     <string name="msg_client_disconnected">Client disconnected</string>
     <string name="password">Password:</string>
     <string name="mi_password">Set Password</string>
+    <string name="err_quicklauncher_not_assigned">Nothing assigned to this quicklauncer</string>
+    <string name="err_quicklauncher_failed">Failed to launch activity</string>
+    <string name="title_activity_quicklauncher">Quick Launcher Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="mi_quicklaunchers">Quicklaunchers</string>
+    <string name="title_select_app">Select App to launch</string>
+    <string name="pref_title_f1">F1 will launch:</string>
+    <string name="pref_title_f2">F2 will launch:</string>
+    <string name="pref_title_f3">F3 will launch:</string>
+    <string name="pref_title_f4">F4 will launch:</string>
+    <string name="pref_title_f5">F5 will launch:</string>
+    <string name="pref_title_f6">F6 will launch:</string>
+    <string name="pref_title_f7">F7 will launch:</string>
+    <string name="pref_title_f8">F8 will launch:</string>
+    <string name="pref_title_f9">F9 will launch:</string>
+    <string name="pref_title_f10">F10 will launch:</string>
+    <string name="pref_title_f11">F11 will launch:</string>
+    <string name="pref_title_f12">F12 will launch:</string>
+    
 
 </resources>

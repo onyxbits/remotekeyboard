@@ -76,6 +76,12 @@
             android:name="de.onyxbits.remotekeyboard.ReplacementActivity"
             android:label="@string/title_activity_replacement" >
         </activity>
+        <activity
+            android:name="de.onyxbits.remotekeyboard.QuicklauncherActivity"
+            android:label="@string/title_activity_quicklauncher" >
+        </activity>
     </application>
+
+
 
 </manifest>
