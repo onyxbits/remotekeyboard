@@ -38,6 +38,7 @@ public class MainActivity extends Activity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
+		AppRater.appLaunched(this);
 
 		// FIXME: This is anything but pretty! Apparently someone at Google thinks
 		// that WLAN is ipv4 only.

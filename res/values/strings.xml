@@ -60,6 +60,11 @@
     <string name="msg_password_not_set">Password not set</string>
     <string name="pref_title_password">Password protection</string>
     <string name="title_set_password">Set password</string>
+    <string name="title_rate">Rate this app?</string>
+    <string name="msg_rate">Hi,\nseems like you find this app useful. Would you consider rating it? This will only take a minute of your time, but encourages further development.</string>
+    <string name="btn_sure">Sure!</string>
+    <string name="btn_no_thanks">No thanks</string>
+    <string name="btn_later">Later</string>
     
 
 </resources>
