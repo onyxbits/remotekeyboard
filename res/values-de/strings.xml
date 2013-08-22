@@ -48,7 +48,7 @@
     <string name="pref_title_f10">F10 startet:</string>
     <string name="pref_title_f11">F11 startet:</string>
     <string name="pref_title_f12">F12 startet:</string>
-    <string name="mi_settings">Einstellunen</string>
+    <string name="mi_settings">Einstellungen</string>
     <string name="pref_header_general">Allgemein</string>
     <string name="pref_header_quicklaunchers">Schnellstarter</string>
     <string name="msg_password_set">Passwort gesetzt</string>
