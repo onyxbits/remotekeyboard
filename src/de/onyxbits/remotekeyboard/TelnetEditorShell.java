@@ -80,7 +80,7 @@ public class TelnetEditorShell implements Shell {
 		PowerManager pm = (PowerManager) RemoteKeyboardService.self
 				.getSystemService(Context.POWER_SERVICE);
 		PowerManager.WakeLock wakeLock = pm.newWakeLock(
-				PowerManager.FULL_WAKE_LOCK, TAG);
+				PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, TAG);
 		wakeLock.acquire();
 
 		Resources res = RemoteKeyboardService.self.getResources();
