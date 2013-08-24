@@ -22,16 +22,21 @@ public class SettingsActivity extends PreferenceActivity implements
 		super.onCreate(savedInstanceState);
 		PackageManager pm = getPackageManager();
 		List<PackageInfo> list = pm.getInstalledPackages(0);
-		CharSequence[] names = new String[list.size()];
-		CharSequence[] displayNames = new String[list.size()];
-		SortablePackageInfo spi[] = new SortablePackageInfo[list.size()];
+		SortablePackageInfo spitmp[] = new SortablePackageInfo[list.size()];
 		Iterator<PackageInfo> it = list.iterator();
 		int idx=0;
 		while(it.hasNext()) {
 			PackageInfo info = it.next();
-			spi[idx] = new SortablePackageInfo(info.packageName,pm.getApplicationLabel(info.applicationInfo));
-			idx++;
+			CharSequence tmp = pm.getApplicationLabel(info.applicationInfo);
+			if (pm.getLaunchIntentForPackage(info.packageName)!=null) {
+				spitmp[idx] = new SortablePackageInfo(info.packageName,tmp);
+				idx++;
+			}
 		}
+		SortablePackageInfo spi[] = new SortablePackageInfo[idx];
+		CharSequence[] names = new String[idx];
+		CharSequence[] displayNames = new String[idx];
+		System.arraycopy(spitmp,0,spi,0,idx);
 		Arrays.sort(spi);
 		for (int i=0;i<spi.length;i++) {
 			names[i] = spi[i].packageName;
