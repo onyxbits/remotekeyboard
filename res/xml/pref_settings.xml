@@ -6,7 +6,7 @@
     	    android:key="pref_password"
     	    android:title="@string/pref_title_password"
     	    android:inputType="textPassword"
-    	    android:dialogTitle=""/>
+    	    android:dialogTitle="@string/title_set_password"/>
     </PreferenceCategory>
     
     <PreferenceCategory android:title="@string/pref_header_quicklaunchers">
