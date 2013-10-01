@@ -26,7 +26,6 @@ import android.widget.Toast;
 public class MainActivity extends Activity implements
 		DialogInterface.OnClickListener {
 
-	public static String TAG = "MainActivity";
 
 
 	@Override
