@@ -73,7 +73,7 @@ public class ReplacementsListActivity extends ListActivity implements
 		switch (item.getItemId()) {
 			case R.id.item_add_replacement: {
 				startActivity(new Intent(this, ReplacementActivity.class));
-				break;
+				return true;
 			}
 			case R.id.item_clear_list: {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -82,11 +82,11 @@ public class ReplacementsListActivity extends ListActivity implements
 						.setMessage(R.string.msg_really_delete)
 						.setPositiveButton(android.R.string.yes, this)
 						.setNegativeButton(android.R.string.no, this).create().show();
-				break;
+				return true;
 			}
 			case R.id.item_export: {
 				doExport();
-				break;
+				return true;
 			}
 			case R.id.item_import: {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -96,13 +96,10 @@ public class ReplacementsListActivity extends ListActivity implements
 				builder.setTitle(R.string.title_import).setView(urlinput)
 						.setPositiveButton(android.R.string.yes, this)
 						.setNegativeButton(android.R.string.no, this).create().show();
-				break;
-			}
-			default: {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

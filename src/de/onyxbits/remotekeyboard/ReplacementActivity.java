@@ -105,9 +105,10 @@ public class ReplacementActivity extends Activity implements
 			if (RemoteKeyboardService.self != null) {
 				RemoteKeyboardService.self.loadReplacements();
 			}
+			finish();
+			return true;
 		}
-		finish();
-		return false;
+		return super.onOptionsItemSelected(item);
 	}
 
 }
