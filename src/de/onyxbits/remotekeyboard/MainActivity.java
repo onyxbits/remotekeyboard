@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 		int addr = wifiInfo.getIpAddress();
 		String ip = (addr & 0xFF) + "." + ((addr >> 8) & 0xFF) + "."
-				+ ((addr >> 16) & 0xFF) + "." + ((addr >> 24) & 0xFF) + ".";
+				+ ((addr >> 16) & 0xFF) + "." + ((addr >> 24) & 0xFF);
 
 		TextView tv = (TextView) findViewById(R.id.quickinstructions);
 		tv.setText(getResources().getString(R.string.app_quickinstuctions, ip));

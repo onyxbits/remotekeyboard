@@ -21,6 +21,8 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.inputmethodservice.InputMethodService;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -209,7 +211,14 @@ public class RemoteKeyboardService extends InputMethodService implements
 		String title = getResources().getString(R.string.notification_title);
 		String content = null;
 		if (remote == null) {
-			content = getResources().getString(R.string.notification_waiting);
+			// FIXME: This is anything but pretty! Apparently someone at Google thinks
+			// that WLAN is ipv4 only.
+			WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+			WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+			int addr = wifiInfo.getIpAddress();
+			String ip = (addr & 0xFF) + "." + ((addr >> 8) & 0xFF) + "."
+					+ ((addr >> 16) & 0xFF) + "." + ((addr >> 24) & 0xFF);
+			content = getResources().getString(R.string.notification_waiting,""+ip);
 		}
 		else {
 			content = getResources().getString(R.string.notification_peer,
