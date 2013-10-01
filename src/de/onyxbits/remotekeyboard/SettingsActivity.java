@@ -1,44 +1,40 @@
 package de.onyxbits.remotekeyboard;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.view.Window;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 
 public class SettingsActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_PROGRESS);
 		super.onCreate(savedInstanceState);
-		PackageManager pm = getPackageManager();
-		List<PackageInfo> list = pm.getInstalledPackages(0);
-		SortablePackageInfo spitmp[] = new SortablePackageInfo[list.size()];
-		Iterator<PackageInfo> it = list.iterator();
-		int idx=0;
-		while(it.hasNext()) {
-			PackageInfo info = it.next();
-			CharSequence tmp = pm.getApplicationLabel(info.applicationInfo);
-			if (pm.getLaunchIntentForPackage(info.packageName)!=null) {
-				spitmp[idx] = new SortablePackageInfo(info.packageName,tmp);
-				idx++;
-			}
-		}
-		SortablePackageInfo spi[] = new SortablePackageInfo[idx];
-		CharSequence[] names = new String[idx];
-		CharSequence[] displayNames = new String[idx];
-		System.arraycopy(spitmp,0,spi,0,idx);
-		Arrays.sort(spi);
-		for (int i=0;i<spi.length;i++) {
+		setProgressBarIndeterminate(true);
+		setProgressBarVisibility(true);
+		new ListTask(this).execute("");
+	}
+
+	/**
+	 * Callback for actually building the UI after we got a list of startable
+	 * apps.
+	 * 
+	 * @param spi
+	 *          list of startable apps.
+	 */
+	protected void onListAvailable(SortablePackageInfo[] spi) {
+		setProgressBarIndeterminate(false);
+		setProgressBarVisibility(false);
+
+		CharSequence[] names = new String[spi.length];
+		CharSequence[] displayNames = new String[spi.length];
+		for (int i = 0; i < spi.length; i++) {
 			names[i] = spi[i].packageName;
 			displayNames[i] = spi[i].displayName;
 		}
@@ -56,14 +52,21 @@ public class SettingsActivity extends PreferenceActivity implements
 			preference.setEntryValues(names);
 			preference.setSummary(((ListPreference) preference).getEntry());
 		}
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences sharedPref = PreferenceManager
+				.getDefaultSharedPreferences(this);
 		if (sharedPref.getString(TelnetEditorShell.PREF_PASSWORD, "").equals("")) {
-			findPreference(TelnetEditorShell.PREF_PASSWORD).setSummary(R.string.msg_password_not_set);
+			findPreference(TelnetEditorShell.PREF_PASSWORD).setSummary(
+					R.string.msg_password_not_set);
 		}
 		else {
-			findPreference(TelnetEditorShell.PREF_PASSWORD).setSummary(R.string.msg_password_set);
+			findPreference(TelnetEditorShell.PREF_PASSWORD).setSummary(
+					R.string.msg_password_set);
 		}
-		
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
 		getPreferenceManager().getSharedPreferences()
 				.registerOnSharedPreferenceChangeListener(this);
 	}
@@ -82,14 +85,17 @@ public class SettingsActivity extends PreferenceActivity implements
 		if (preference instanceof ListPreference) {
 			preference.setSummary(((ListPreference) preference).getEntry());
 		}
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences sharedPref = PreferenceManager
+				.getDefaultSharedPreferences(this);
 		if (sharedPref.getString(TelnetEditorShell.PREF_PASSWORD, "").equals("")) {
-			findPreference(TelnetEditorShell.PREF_PASSWORD).setSummary(R.string.msg_password_not_set);
+			findPreference(TelnetEditorShell.PREF_PASSWORD).setSummary(
+					R.string.msg_password_not_set);
 		}
 		else {
-			findPreference(TelnetEditorShell.PREF_PASSWORD).setSummary(R.string.msg_password_set);
+			findPreference(TelnetEditorShell.PREF_PASSWORD).setSummary(
+					R.string.msg_password_set);
 		}
-		
+
 	}
 
 }
