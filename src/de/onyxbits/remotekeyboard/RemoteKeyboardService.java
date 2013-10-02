@@ -8,6 +8,7 @@ import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -209,7 +210,15 @@ public class RemoteKeyboardService extends InputMethodService implements
 		String title = getResources().getString(R.string.notification_title);
 		String content = null;
 		if (remote == null) {
-			content = getResources().getString(R.string.notification_waiting);
+			ArrayList<String> ips = MainActivity.getNetworkAddresses();
+			String ip;
+			if (ips.size() > 0) {
+				ip = ips.get(0);
+			} else {
+				ip = "???";
+			}
+			int port = 2323;
+			content = getResources().getString(R.string.notification_waiting, ip, port);
 		}
 		else {
 			content = getResources().getString(R.string.notification_peer,
