@@ -1,5 +1,11 @@
 package de.onyxbits.remotekeyboard;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,21 +41,43 @@ public class MainActivity extends Activity implements
 		setContentView(R.layout.activity_main);
 	}
 
+	// Based on code from WiFi Keyboard project.
+	// https://code.google.com/p/wifikeyboard/
+	public static ArrayList<String> getNetworkAddresses() {
+		ArrayList<String> addrs = new ArrayList<String>();
+		try {
+			Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
+			while (ifaces.hasMoreElements()) {
+				NetworkInterface iface = ifaces.nextElement();
+				Enumeration<InetAddress> addresses = iface.getInetAddresses();
+				while (addresses.hasMoreElements()) {
+					InetAddress addr = addresses.nextElement();
+					if (addr.isLoopbackAddress()) {
+						continue;
+					}
+					if (addr instanceof Inet4Address) {
+						// IPv4 addresses at the beginning of the list.
+						addrs.add(0, addr.getHostAddress());
+					} else {
+						// IPv6 addresses at the end of the list.
+						addrs.add(addr.getHostAddress());
+					}
+				}
+			}
+		} catch (SocketException e) {
+			// Debug.d("failed to get network interfaces");
+		}
+		return addrs;
+    }
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		AppRater.appLaunched(this);
 
-		// FIXME: This is anything but pretty! Apparently someone at Google thinks
-		// that WLAN is ipv4 only.
-		WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
-		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-		int addr = wifiInfo.getIpAddress();
-		String ip = (addr & 0xFF) + "." + ((addr >> 8) & 0xFF) + "."
-				+ ((addr >> 16) & 0xFF) + "." + ((addr >> 24) & 0xFF) + ".";
-
+		String ips = getNetworkAddresses().toString();
 		TextView tv = (TextView) findViewById(R.id.quickinstructions);
-		tv.setText(getResources().getString(R.string.app_quickinstuctions, ip));
+		tv.setText(getResources().getString(R.string.app_quickinstuctions, ips));
 
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		List<InputMethodInfo> enabled = imm.getEnabledInputMethodList();
