@@ -1,7 +1,6 @@
 package de.onyxbits.remotekeyboard;
 
 import net.wimpi.telnetd.io.TerminalIO;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
