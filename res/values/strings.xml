@@ -65,6 +65,7 @@
     <string name="btn_sure">Sure!</string>
     <string name="btn_no_thanks">No thanks</string>
     <string name="btn_later">Later</string>
+    <string name="pref_title_fullscreen">Fullscreen textboxes in landscape mode</string>
     
 
 </resources>

@@ -17,6 +17,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,6 +25,7 @@ import android.inputmethodservice.InputMethodService;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
@@ -93,6 +95,12 @@ public class RemoteKeyboardService extends InputMethodService implements
 		catch (BootException e) {
 			Log.w(TAG, e);
 		}
+	}
+
+	@Override
+	public boolean onEvaluateFullscreenMode() {
+		SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+		return p.getBoolean("pref_fullscreen",false);
 	}
 
 	@Override
@@ -218,7 +226,8 @@ public class RemoteKeyboardService extends InputMethodService implements
 			int addr = wifiInfo.getIpAddress();
 			String ip = (addr & 0xFF) + "." + ((addr >> 8) & 0xFF) + "."
 					+ ((addr >> 16) & 0xFF) + "." + ((addr >> 24) & 0xFF);
-			content = getResources().getString(R.string.notification_waiting,""+ip);
+			content = getResources()
+					.getString(R.string.notification_waiting, "" + ip);
 		}
 		else {
 			content = getResources().getString(R.string.notification_peer,
