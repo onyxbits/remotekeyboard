@@ -1,11 +1,5 @@
 package de.onyxbits.remotekeyboard;
 import android.app.*;
-import android.os.*;
-import android.widget.*;
-import android.view.*;
-import android.hardware.*;
-import java.util.*;
-import android.graphics.*;
 import android.content.*;
 import android.net.*;
 

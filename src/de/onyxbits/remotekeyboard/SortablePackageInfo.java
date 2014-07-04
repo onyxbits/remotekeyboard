@@ -1,8 +1,5 @@
 package de.onyxbits.remotekeyboard;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-
 /**
  * Wrapper class for sorting packages alphabetically by label.
  * 
