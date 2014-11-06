@@ -325,7 +325,7 @@ class CtrlInputAction implements Runnable {
 				}
 			}
 		}
-		typeKey(con, KeyEvent.KEYCODE_ENTER);
+		con.commitText("\n", 1);
 	}
 
 	/**
