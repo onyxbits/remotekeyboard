@@ -11,7 +11,7 @@
     <string name="mi_select">Select Keyboard</string>
     <string name="err_notenabled">Remote Keyboard is not enabled as an inputmethod. Open system settings to enable it now?</string>
     <string name="err_notenabled_title">Inputmethod disabled</string>
-    <string name="app_quickinstuctions">Set Remote Keyboard as your <b>input method</b>, then touch any textfield to activate it. To actually type, connect to your device with a telnet client from your desktop computer. Remote Keyboard is listening for connections on port <b>2323</b> of host <b>%1$s</b>.</string>
+    <string name="app_quickinstuctions">Set Remote Keyboard as your <b>input method</b>, then touch any textfield to activate it. To actually type, connect to your device with a telnet client from your desktop computer. Remote Keyboard is listening for connections on port <b>2323</b> of host <b>%1$s</b>.<p/> For a real test, try using Remote Keyboard with TextFiction (see menu).</string>
     <string name="terminal_title">Android Remote Keyboard</string>
     <string name="terminal_statusbar">Status: Connected</string>
     <string name="notification_peer">Connected to: %1$s</string>
@@ -66,6 +66,7 @@
     <string name="btn_no_thanks">No thanks</string>
     <string name="btn_later">Later</string>
     <string name="pref_title_fullscreen">Fullscreen textboxes in landscape mode</string>
+    <string name="title_tf">TextFiction</string>
     
 
 </resources>
