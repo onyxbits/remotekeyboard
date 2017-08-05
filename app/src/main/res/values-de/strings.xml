@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="err_noclient">Nicht verbunden!</string>
+    <string name="notification_waiting">Warte auf %1$s Port 2323</string>
+    <string name="testtext">Verbindung hier testen!</string>
+    <string name="mi_help">Hilfe</string>
+    <string name="mi_select">Tastatur auswählen</string>
+    <string name="err_notenabled">Remote Keyboard ist nicht als Eingabemethode aktiviert. Systemeinstellungen öffnen?</string>
+    <string name="err_notenabled_title">Eingabemethode deaktiviert</string>
+    <string name="app_quickinstuctions">Remote Keyboard muss als Eingabemethode festgelegt werden. Danach kann der Dienst durch berühren eines beliebigen Textfelded gestartet werden. Um zu tippen, muss eine Netzwerkverbindung zwischen PC und Android Gerät über das Telnet Protokoll hergestellt werden. Remote Keyboard wartet auf Verbindungen auf Port <b>2323</b> von IP Adresse <b>%1$s</b>.</string>
+    <string name="notification_peer">Verbunden mit: %1$s</string>
+    <string name="msg_sent">Text gesendet</string>
+    <string name="title_activity_replacements_list">Ersetzungen</string>
+    <string name="mi_add_replacement">Hinzufügen</string>
+    <string name="mi_replacements">Wortersetzungen</string>
+    <string name="title_activity_replacement">Ersetzungs Editor</string>
+    <string name="mi_trash">Löschen</string>
+    <string name="lbl_shortcut">Abkürzung:</string>
+    <string name="lbl_phrase">Phrase:</string>
+    <string name="no_replacements">Keine Wortersetzungen definiert.</string>
+    <string name="err_no_replacement">Keine Wortersetzung für: %1$s"</string>
+    <string name="mi_clear_list">Alles löschen</string>
+    <string name="homepage">http://www.onyxbits.de/remotekeyboard</string>
+    <string name="title_confirm">Bitte bestätigen</string>
+    <string name="msg_really_delete">Wirklich alles löschen?</string>
+    <string name="mi_export">Exportieren</string>
+    <string name="mi_import">Importieren</string>
+    <string name="title_import">Importiere von URL</string>
+    <string name="err_malformed_url">Kaputte URL</string>
+    <string name="err_network_error">Netzwerk Fehler</string>
+    <string name="err_corrupt_data">Defekte Daten</string>
+    <string name="msg_client_disconnected">Verbindung getrennt</string>
+    <string name="password">Passwort:</string>
+    <string name="err_quicklauncher_not_assigned">Schnellstarter hat keine Zuweisung</string>
+    <string name="err_quicklauncher_failed">Konnte app nicht starten</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="title_select_app">Welche App soll gestartet werden?</string>
+    <string name="pref_title_f1">F1 startet:</string>
+    <string name="pref_title_f2">F2 startet:</string>
+    <string name="pref_title_f3">F3 startet:</string>
+    <string name="pref_title_f4">F4 startet:</string>
+    <string name="pref_title_f5">F5 startet:</string>
+    <string name="pref_title_f6">F6 startet:</string>
+    <string name="pref_title_f7">F7 startet:</string>
+    <string name="pref_title_f8">F8 startet:</string>
+    <string name="pref_title_f9">F9 startet:</string>
+    <string name="pref_title_f10">F10 startet:</string>
+    <string name="pref_title_f11">F11 startet:</string>
+    <string name="pref_title_f12">F12 startet:</string>
+    <string name="mi_settings">Einstellungen</string>
+    <string name="pref_header_general">Allgemein</string>
+    <string name="pref_header_quicklaunchers">Schnellstarter</string>
+    <string name="msg_password_set">Passwort gesetzt</string>
+    <string name="msg_password_not_set">Passwort nicht gesetzt</string>
+    <string name="pref_title_password">Passwortschutz</string>
+    <string name="title_set_password">Passwort setzen</string>
+    <string name="title_rate">App bewerten?</string>
+    <string name="msg_rate">Hi,\nist Remote Keyboard nützlich? Wenn ja, dann wäre eine Bewertung auf Google Play sehr willkommen. Eine Bewertung schreiben?</string>
+    <string name="btn_sure">Sicher!</string>
+    <string name="btn_no_thanks">Nein, danke</string>
+    <string name="btn_later">Später</string>
+
+
+</resources>

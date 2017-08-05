@@ -1,6 +1,0 @@
-Android input method that allows users to connect to their devices from
-their desktop computers via the telnet protocol.
-
-Required dependencies:
-* android-support-v4.jar  
-* commons-logging-1.1.2.jar

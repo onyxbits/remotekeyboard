@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_add_replacement"
+        android:icon="@drawable/ic_action_add"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/mi_add_replacement"></item>
+    <item
+        android:id="@+id/item_export"
+        android:title="@string/mi_export"></item>
+    <item
+        android:id="@+id/item_import"
+        android:title="@string/mi_import"></item>
+    <item
+        android:id="@+id/item_clear_list"
+        android:icon="@drawable/ic_action_trash"
+        android:title="@string/mi_clear_list"></item>
+
+
+</menu>

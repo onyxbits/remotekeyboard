@@ -1,4 +1,0 @@
-<input-method
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:settingsActivity="de.onyxbits.remotekeyboard.SettingsActivity"
-/>
