@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -32,9 +32,10 @@
 
 package net.wimpi.telnetd.io.terminal;
 
+import android.util.Log;
+
 import net.wimpi.telnetd.BootException;
 import net.wimpi.telnetd.util.StringUtil;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -67,109 +68,8 @@ public class TerminalManager {
 
     private TerminalManager(Map terminals) {
         this();
-        this.terminals=new HashMap(terminals);
+        this.terminals = new HashMap(terminals);
     }
-
-    /**
-     * Returns a reference to a terminal that has
-     * been set up, regarding to the key given as
-     * parameter.<br>
-     * If the key does not represent a terminal name or
-     * any alias for any terminal, then the returned terminal
-     * will be a default basic terminal (i.e. vt100 without
-     * color support).
-     *
-     * @param key String that represents a terminal name or an alias.
-     * @return Terminal instance or null if the key was invalid.
-     */
-    public Terminal getTerminal(String key) {
-
-        Terminal term = null;
-
-        try {
-            //Log.d(TAG, "Key:" + key);
-            if (key.equals("ANSI") && m_WindoofHack) {
-                //this is a hack, sorry folks but the *grmpflx* *censored*
-                //windoof telnet application thinks its uppercase ansi *brr*
-                term = (Terminal) terminals.get("windoof");
-            } else {
-                key = key.toLowerCase();
-                //Log.d(TAG, "Key:" + key);
-                if (!terminals.containsKey(key)) {
-                    term = (Terminal) terminals.get("default");
-                } else {
-                    term = (Terminal) terminals.get(key);
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "getTerminal()", e);
-        }
-
-        return term;
-    }//getTerminal
-
-    public String[] getAvailableTerminals() {
-        //unroll hashtable keys into string array
-        //maybe not too efficient but well
-        String[] tn = new String[terminals.size()];
-        int i = 0;
-        for (Iterator iter = terminals.keySet().iterator(); iter.hasNext(); i++) {
-            tn[i] = (String) iter.next();
-        }
-        return tn;
-    }//getAvailableTerminals
-
-    public void setWindoofHack(boolean b) {
-        m_WindoofHack = b;
-    }//setWinHack
-
-    /**
-     * Loads the terminals and prepares an instance of each.
-     */
-    private void setupTerminals(HashMap terminalsMap) {
-
-        String termname = "";
-        String termclass = "";
-        Terminal term = null;
-        Object[] entry = null;
-
-        for (Iterator iter = terminalsMap.keySet().iterator(); iter.hasNext();) {
-            try {
-                //first we get the name
-                termname = (String) iter.next();
-
-                //then the entry
-                entry = (Object[]) terminalsMap.get(termname);
-
-                //then the fully qualified class string
-                termclass = (String) entry[0];
-                Log.d(TAG, "Preparing terminal [" + termname + "] " + termclass);
-
-                //get a new class object instance (e.g. load class and instantiate it)
-                term = (Terminal) Class.forName(termclass).newInstance();
-
-                //and put an instance + references into myTerminals
-                terminals.put(termname, term);
-                String[] aliases = (String[]) entry[1];
-                for (int i = 0; i < aliases.length; i++) {
-                    //without overwriting existing !!!
-                    if (!terminals.containsKey(aliases[i])) {
-                        terminals.put(aliases[i], term);
-                    }
-                }
-
-            } catch (Exception e) {
-                Log.e(TAG, "setupTerminals()", e);
-            }
-
-        }
-        //check if we got all
-        Log.d(TAG, "Terminals:");
-        for (Iterator iter = terminals.keySet().iterator(); iter.hasNext();) {
-            String tn = (String) iter.next();
-            Log.d(TAG, tn + "=" + terminals.get(tn));
-        }
-    }//setupTerminals
 
     /**
      * Factory method for creating the Singleton instance of
@@ -241,28 +141,30 @@ public class TerminalManager {
 
         } catch (Exception ex) {
             Log.e(TAG, "createManager()", ex);
-            throw new BootException("Creating TerminalManager Instance failed:\n" + ex.getMessage());
+            throw new BootException(
+                    "Creating TerminalManager Instance failed:\n" + ex.getMessage());
         }
     }//createManager
-    
+
     /**
      * sets up a terminal manager with a ready made hashmap of terminals.
-     * 
-     * 
+     *
      * @param terminals: hashmap of terminal classes with their alias names
-     * @param winhack: is this a windoof hack
-     * @throws BootException 
+     * @param winhack:   is this a windoof hack
      */
-    public static TerminalManager createTerminalManager(Map terminals, boolean winhack) throws BootException{
-        if(!terminals.containsKey("default"))
+    public static TerminalManager createTerminalManager(Map terminals, boolean winhack)
+            throws BootException {
+        if (!terminals.containsKey("default")) {
             throw new BootException("No default terminal declared.");
-        
+        }
+
         TerminalManager tmgr;
         tmgr = new TerminalManager(terminals);
         tmgr.setWindoofHack(winhack);
 
         return tmgr;
     }
+
     /**
      * Accessor method for the Singleton instance of this class.<br>
      * Note that it returns null if the instance was not properly
@@ -273,6 +175,107 @@ public class TerminalManager {
     public static TerminalManager getReference() {
         return c_Self;
     }//getReference
+
+    /**
+     * Returns a reference to a terminal that has
+     * been set up, regarding to the key given as
+     * parameter.<br>
+     * If the key does not represent a terminal name or
+     * any alias for any terminal, then the returned terminal
+     * will be a default basic terminal (i.e. vt100 without
+     * color support).
+     *
+     * @param key String that represents a terminal name or an alias.
+     * @return Terminal instance or null if the key was invalid.
+     */
+    public Terminal getTerminal(String key) {
+
+        Terminal term = null;
+
+        try {
+            //Log.d(TAG, "Key:" + key);
+            if (key.equals("ANSI") && m_WindoofHack) {
+                //this is a hack, sorry folks but the *grmpflx* *censored*
+                //windoof telnet application thinks its uppercase ansi *brr*
+                term = (Terminal) terminals.get("windoof");
+            } else {
+                key = key.toLowerCase();
+                //Log.d(TAG, "Key:" + key);
+                if (!terminals.containsKey(key)) {
+                    term = (Terminal) terminals.get("default");
+                } else {
+                    term = (Terminal) terminals.get(key);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getTerminal()", e);
+        }
+
+        return term;
+    }//getTerminal
+
+    public String[] getAvailableTerminals() {
+        //unroll hashtable keys into string array
+        //maybe not too efficient but well
+        String[] tn = new String[terminals.size()];
+        int i = 0;
+        for (Iterator iter = terminals.keySet().iterator(); iter.hasNext(); i++) {
+            tn[i] = (String) iter.next();
+        }
+        return tn;
+    }//getAvailableTerminals
+
+    public void setWindoofHack(boolean b) {
+        m_WindoofHack = b;
+    }//setWinHack
+
+    /**
+     * Loads the terminals and prepares an instance of each.
+     */
+    private void setupTerminals(HashMap terminalsMap) {
+
+        String termname = "";
+        String termclass = "";
+        Terminal term = null;
+        Object[] entry = null;
+
+        for (Iterator iter = terminalsMap.keySet().iterator(); iter.hasNext(); ) {
+            try {
+                //first we get the name
+                termname = (String) iter.next();
+
+                //then the entry
+                entry = (Object[]) terminalsMap.get(termname);
+
+                //then the fully qualified class string
+                termclass = (String) entry[0];
+                Log.d(TAG, "Preparing terminal [" + termname + "] " + termclass);
+
+                //get a new class object instance (e.g. load class and instantiate it)
+                term = (Terminal) Class.forName(termclass).newInstance();
+
+                //and put an instance + references into myTerminals
+                terminals.put(termname, term);
+                String[] aliases = (String[]) entry[1];
+                for (int i = 0; i < aliases.length; i++) {
+                    //without overwriting existing !!!
+                    if (!terminals.containsKey(aliases[i])) {
+                        terminals.put(aliases[i], term);
+                    }
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "setupTerminals()", e);
+            }
+
+        }
+        //check if we got all
+        Log.d(TAG, "Terminals:");
+        for (Iterator iter = terminals.keySet().iterator(); iter.hasNext(); ) {
+            String tn = (String) iter.next();
+            Log.d(TAG, tn + "=" + terminals.get(tn));
+        }
+    }//setupTerminals
 
     public HashMap getTerminals() {
         return terminals;

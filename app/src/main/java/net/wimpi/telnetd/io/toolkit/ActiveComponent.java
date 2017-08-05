@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -29,4 +29,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  ***/
-package net.wimpi.telnetd.io.toolkit;import net.wimpi.telnetd.io.BasicTerminalIO;/** * Class that represents an abstract active toolkit component. * Components derived from this class can be activated and will * interactively do i/o. * * @author Dieter Wimberger * @version 2.0 (16/07/2006) */public abstract class ActiveComponent extends Component {  /**   * Contructs an active toolkit component.   */  public ActiveComponent(BasicTerminalIO io, String name) {    super(io, name);  }//constructor  /**   * Method to make the instance the active object.   */  public abstract void run() throws Exception;}//class ActiveComponent
+
+package net.wimpi.telnetd.io.toolkit;
+
+import net.wimpi.telnetd.io.BasicTerminalIO;
+
+/**
+ * Class that represents an abstract active toolkit component.
+ * Components derived from this class can be activated and will
+ * interactively do i/o.
+ *
+ * @author Dieter Wimberger
+ * @version 2.0 (16/07/2006)
+ */
+public abstract class ActiveComponent extends Component {
+
+    /**
+     * Contructs an active toolkit component.
+     */
+    public ActiveComponent(BasicTerminalIO io, String name) {
+        super(io, name);
+    }//constructor
+
+    /**
+     * Method to make the instance the active object.
+     */
+    public abstract void run() throws Exception;
+
+}//class ActiveComponent

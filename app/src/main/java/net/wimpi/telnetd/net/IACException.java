@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -45,14 +45,14 @@ import java.io.IOException;
  */
 public class IACException extends IOException {
 
-  /**
-   * Constructs an IACException instance with a given
-   * message (i.e. human readable reason).
-   *
-   * @param msg a String that describes what happened.
-   */
-  public IACException(String msg) {
-    super(msg);
-  }//constructor
+    /**
+     * Constructs an IACException instance with a given
+     * message (i.e. human readable reason).
+     *
+     * @param msg a String that describes what happened.
+     */
+    public IACException(String msg) {
+        super(msg);
+    }//constructor
 
 }//class IACException

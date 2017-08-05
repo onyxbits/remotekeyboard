@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Keyboard android:keyWidth="10%"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:keyHeight="50px"
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:horizontalGap="2px"
-    android:verticalGap="2px" >
-         
-    <Row android:keyWidth="33%" >
-    	<Key android:keyIcon="@drawable/ic_action_selectime" android:codes="0" />
-    	<!-- <Key android:keyIcon="@drawable/ic_action_settings" android:codes="1" /> -->
-    	<Key android:keyIcon="@drawable/ic_action_disconnect" android:codes="3"  />
-    	<Key android:keyIcon="@drawable/ic_action_transfer" android:codes="2"  />
+    android:keyHeight="50px"
+    android:keyWidth="10%"
+    android:verticalGap="2px">
+
+    <Row android:keyWidth="33%">
+        <Key
+            android:codes="0"
+            android:keyIcon="@drawable/ic_action_selectime" />
+        <!-- <Key android:keyIcon="@drawable/ic_action_settings" android:codes="1" /> -->
+        <Key
+            android:codes="3"
+            android:keyIcon="@drawable/ic_action_disconnect" />
+        <Key
+            android:codes="2"
+            android:keyIcon="@drawable/ic_action_transfer" />
     </Row>
-    
-    
+
+
 </Keyboard>

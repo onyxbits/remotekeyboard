@@ -9,8 +9,8 @@ android {
         minSdkVersion 14
         targetSdkVersion 26
     }
-    android{
-        useLibrary  'org.apache.http.legacy'
+    android {
+        useLibrary 'org.apache.http.legacy'
     }
     buildTypes {
         release {

@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -37,16 +37,21 @@ import android.util.Log;
 import net.wimpi.telnetd.BootException;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+import java.util.Stack;
 
 /**
  * Class that takes care for active and queued connection.
  * Housekeeping is done also for connections that were just broken
- * off, or exceeded their timeout. 
- * 
+ * off, or exceeded their timeout.
+ *
  * @author Dieter Wimberger
  * @version 2.0 (16/07/2006)
  */
@@ -68,12 +73,14 @@ public class ConnectionManager implements Runnable {
     private boolean stopping = false;
 
     public ConnectionManager() {
-        m_ThreadGroup = new ThreadGroup(new StringBuffer().append(this.toString()).append("Connections").toString());
+        m_ThreadGroup = new ThreadGroup(new StringBuffer().append(this.toString()).append(
+                "Connections").toString());
         m_ClosedConnections = new Stack();
         m_OpenConnections = Collections.synchronizedList(new ArrayList(100));
     }
 
-    public ConnectionManager(int con, int timew, int timedis, int hoke, ConnectionFilter filter, String lsh, boolean lm) {
+    public ConnectionManager(int con, int timew, int timedis, int hoke, ConnectionFilter filter,
+            String lsh, boolean lm) {
         this();
         connectionFilter = filter;
         loginShell = lsh;
@@ -83,6 +90,65 @@ public class ConnectionManager implements Runnable {
         disconnectTimeout = timedis;
         housekeepingInterval = hoke;
     }//constructor
+
+    /**
+     * Factory method for the ConnectionManager.<br>
+     * A class operation that will return a new ConnectionManager instance.
+     *
+     * @param settings Properties containing the settings for this instance.
+     */
+    public static ConnectionManager createConnectionManager(String name, Properties settings)
+            throws BootException {
+
+        try {
+            int maxc = Integer.parseInt(settings.getProperty(name + ".maxcon"));
+            int timow = Integer.parseInt(settings.getProperty(name + ".time_to_warning"));
+            int timodis = Integer.parseInt(settings.getProperty(name + ".time_to_timedout"));
+            int hoke = Integer.parseInt(settings.getProperty(name + ".housekeepinginterval"));
+            String filterclass = settings.getProperty(name + ".connectionfilter");
+            ConnectionFilter filter = null;
+            String loginshell = "";
+            boolean linemode = false;
+            if (filterclass != null && filterclass.length() != 0
+                    && !filterclass.toLowerCase().equals("none")) {
+                //load filter
+                filter = (ConnectionFilter) Class.forName(filterclass).newInstance();
+                filter.initialize(settings);
+            }
+            loginshell = settings.getProperty(name + ".loginshell");
+            if (loginshell == null || loginshell.length() == 0) {
+                Log.e(TAG, "Login shell not specified.");
+                throw new BootException("Login shell must be specified.");
+            }
+            String inputmode = settings.getProperty(name + ".inputmode");
+            if (inputmode == null || inputmode.length() == 0) {
+                Log.i(TAG, "Input mode not specified using character input as default.");
+                linemode = false;
+            } else if (inputmode.toLowerCase().equals("line")) {
+                linemode = true;
+            }
+            //return fabricated manager
+            ConnectionManager cm = new ConnectionManager(maxc, timow, timodis, hoke, filter,
+                    loginshell, linemode);
+            //set higher priority!
+            //cm.setPriority(Thread.NORM_PRIORITY + 2);
+            return cm;
+        } catch (Exception ex) {
+            Log.e(TAG, "createConnectionManager():", ex);
+            throw new BootException(
+                    "Failure while creating ConnectionManger instance:\n" + ex.getMessage());
+        }
+    }//createManager
+
+    /**
+     * Gets the active ConnectionFilter instance or
+     * returns null if no filter is set.
+     *
+     * @return the managers ConnectionFilter.
+     */
+    public ConnectionFilter getConnectionFilter() {
+        return connectionFilter;
+    }//getConnectionFilter
 
     /**
      * Set a connection filter for this
@@ -96,17 +162,8 @@ public class ConnectionManager implements Runnable {
     }//setConnectionFilter
 
     /**
-     * Gets the active ConnectionFilter instance or
-     * returns null if no filter is set.
-     *
-     * @return the managers ConnectionFilter.
-     */
-    public ConnectionFilter getConnectionFilter() {
-        return connectionFilter;
-    }//getConnectionFilter
-
-    /**
      * Returns the number of open connections.
+     *
      * @return the number of open connections as <tt>int</tt>.
      */
     public int openConnectionCount() {
@@ -115,8 +172,6 @@ public class ConnectionManager implements Runnable {
 
     /**
      * Returns the {@link Connection} at the given index.
-     * @param idx
-     * @return
      */
     public Connection getConnection(int idx) {
         synchronized (m_OpenConnections) {
@@ -129,12 +184,12 @@ public class ConnectionManager implements Runnable {
      * <tt>InetAddress</tt>.
      *
      * @return all {@link Connection} instances with the given
-     *         <tt>InetAddress</tt>.
+     * <tt>InetAddress</tt>.
      */
     public Connection[] getConnectionsByAdddress(InetAddress addr) {
         ArrayList l = new ArrayList();
         synchronized (m_OpenConnections) {
-            for (Iterator iterator = m_OpenConnections.iterator(); iterator.hasNext();) {
+            for (Iterator iterator = m_OpenConnections.iterator(); iterator.hasNext(); ) {
                 Connection connection = (Connection) iterator.next();
                 if (connection.getConnectionData().getInetAddress().equals(addr)) {
                     l.add(connection);
@@ -168,7 +223,7 @@ public class ConnectionManager implements Runnable {
             Log.e(TAG, "stop()", iex);
         }
         synchronized (m_OpenConnections) {
-            for (Iterator iter = m_OpenConnections.iterator(); iter.hasNext();) {
+            for (Iterator iter = m_OpenConnections.iterator(); iter.hasNext(); ) {
                 try {
                     Connection tc = (Connection) iter.next();
                     //maybe write a disgrace to the socket?
@@ -190,7 +245,8 @@ public class ConnectionManager implements Runnable {
      */
     public void makeConnection(Socket insock) {
         Log.d(TAG, "makeConnection()::" + insock.toString());
-        if (connectionFilter == null || (connectionFilter != null && connectionFilter.isAllowed(insock.getInetAddress()))) {
+        if (connectionFilter == null || (connectionFilter != null && connectionFilter.isAllowed(
+                insock.getInetAddress()))) {
             //we create the connection data object at this point to
             //store certain information there.
             ConnectionData newCD = new ConnectionData(insock, this);
@@ -200,7 +256,7 @@ public class ConnectionManager implements Runnable {
                 //create a new Connection instance
                 Connection con = new Connection(m_ThreadGroup, newCD);
                 //log the newly created connection
-                Object[] args = { new Integer(m_OpenConnections.size() + 1) };
+                Object[] args = {new Integer(m_OpenConnections.size() + 1)};
                 Log.i(TAG, MessageFormat.format("connection #{0,number,integer} made.", args));
                 //register it for being managed
                 synchronized (m_OpenConnections) {
@@ -254,7 +310,8 @@ public class ConnectionManager implements Runnable {
         Connection nextOne = (Connection) m_BrokenConnections.pop();
         Log.i(TAG, "cleanupBroken():: Closing broken connection " + nextOne.toString());
         //fire logoff event for shell site cleanup , beware could hog the daemon thread
-        nextOne.processConnectionEvent(new ConnectionEvent(nextOne, ConnectionEvent.CONNECTION_BROKEN));
+        nextOne.processConnectionEvent(new ConnectionEvent(nextOne, ConnectionEvent
+        .CONNECTION_BROKEN));
         //close the connection, will be automatically registered as closed
         nextOne.close();
       }
@@ -280,7 +337,7 @@ public class ConnectionManager implements Runnable {
         }
         //do routine checks on active connections
         synchronized (m_OpenConnections) {
-            for (Iterator iter = m_OpenConnections.iterator(); iter.hasNext();) {
+            for (Iterator iter = m_OpenConnections.iterator(); iter.hasNext(); ) {
                 Connection conn = (Connection) iter.next();
                 ConnectionData cd = conn.getConnectionData();
                 //check if it is dead and remove it.
@@ -296,17 +353,22 @@ public class ConnectionManager implements Runnable {
                     //..and for disconnect
                     if (inactivity > (disconnectTimeout + warningTimeout)) {
                         //this connection needs to be disconnected :)
-                        Log.d(TAG, "checkOpenConnections():" + conn.toString() + " exceeded total timeout.");
-                        //fire logoff event for shell site cleanup , beware could hog the daemon thread
-                        conn.processConnectionEvent(new ConnectionEvent(conn, ConnectionEvent.CONNECTION_TIMEDOUT));
+                        Log.d(TAG, "checkOpenConnections():" + conn.toString()
+                                + " exceeded total timeout.");
+                        //fire logoff event for shell site cleanup , beware could hog the daemon
+                        // thread
+                        conn.processConnectionEvent(
+                                new ConnectionEvent(conn, ConnectionEvent.CONNECTION_TIMEDOUT));
                         //conn.close();
                     } else {
                         //this connection needs to be warned :)
                         if (!cd.isWarned()) {
-                            Log.d(TAG, "checkOpenConnections():" + conn.toString() + " exceeded warning timeout.");
+                            Log.d(TAG, "checkOpenConnections():" + conn.toString()
+                                    + " exceeded warning timeout.");
                             cd.setWarned(true);
                             //warning event is fired but beware this could hog the daemon thread!!
-                            conn.processConnectionEvent(new ConnectionEvent(conn, ConnectionEvent.CONNECTION_IDLE));
+                            conn.processConnectionEvent(
+                                    new ConnectionEvent(conn, ConnectionEvent.CONNECTION_IDLE));
                         }
                     }
                 }
@@ -322,13 +384,13 @@ public class ConnectionManager implements Runnable {
      *
      * @param con the connection that is broken.
      *
-    public void registerBrokenConnection(Connection con) {
-      if (!m_BrokenConnections.contains(con) && !m_ClosedConnections.contains(con)) {
-        Log.d(TAG, "registerBrokenConnection()::" + con.toString());
-        m_BrokenConnections.push(con);
-      }
-    }//registerBrokenConnection
-    */
+     *            public void registerBrokenConnection(Connection con) {
+     *            if (!m_BrokenConnections.contains(con) && !m_ClosedConnections.contains(con)) {
+     *            Log.d(TAG, "registerBrokenConnection()::" + con.toString());
+     *            m_BrokenConnections.push(con);
+     *            }
+     *            }//registerBrokenConnection
+     */
     public void registerClosedConnection(Connection con) {
         if (stopping) {
             return;
@@ -338,51 +400,6 @@ public class ConnectionManager implements Runnable {
             m_ClosedConnections.push(con);
         }
     }//unregister
-
-    /**
-     * Factory method for the ConnectionManager.<br>
-     * A class operation that will return a new ConnectionManager instance.
-     *
-     * @param settings Properties containing the settings for this instance.
-     */
-    public static ConnectionManager createConnectionManager(String name, Properties settings) throws BootException {
-
-        try {
-            int maxc = Integer.parseInt(settings.getProperty(name + ".maxcon"));
-            int timow = Integer.parseInt(settings.getProperty(name + ".time_to_warning"));
-            int timodis = Integer.parseInt(settings.getProperty(name + ".time_to_timedout"));
-            int hoke = Integer.parseInt(settings.getProperty(name + ".housekeepinginterval"));
-            String filterclass = settings.getProperty(name + ".connectionfilter");
-            ConnectionFilter filter = null;
-            String loginshell = "";
-            boolean linemode = false;
-            if (filterclass != null && filterclass.length() != 0 && !filterclass.toLowerCase().equals("none")) {
-                //load filter
-                filter = (ConnectionFilter) Class.forName(filterclass).newInstance();
-                filter.initialize(settings);
-            }
-            loginshell = settings.getProperty(name + ".loginshell");
-            if (loginshell == null || loginshell.length() == 0) {
-                Log.e(TAG, "Login shell not specified.");
-                throw new BootException("Login shell must be specified.");
-            }
-            String inputmode = settings.getProperty(name + ".inputmode");
-            if (inputmode == null || inputmode.length() == 0) {
-                Log.i(TAG, "Input mode not specified using character input as default.");
-                linemode = false;
-            } else if (inputmode.toLowerCase().equals("line")) {
-                linemode = true;
-            }
-            //return fabricated manager
-            ConnectionManager cm = new ConnectionManager(maxc, timow, timodis, hoke, filter, loginshell, linemode);
-            //set higher priority!
-            //cm.setPriority(Thread.NORM_PRIORITY + 2);
-            return cm;
-        } catch (Exception ex) {
-            Log.e(TAG, "createConnectionManager():", ex);
-            throw new BootException("Failure while creating ConnectionManger instance:\n" + ex.getMessage());
-        }
-    }//createManager
 
     public int getDisconnectTimeout() {
         return disconnectTimeout;

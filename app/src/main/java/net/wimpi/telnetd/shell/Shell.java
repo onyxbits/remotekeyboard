@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -51,13 +51,13 @@ import net.wimpi.telnetd.net.ConnectionListener;
  * @version 2.0 (16/07/2006)
  */
 public interface Shell
-    extends ConnectionListener {
+        extends ConnectionListener {
 
-  /**
-   * Method that runs the shell.
-   *
-   * @param con Connection the shell is associated with
-   */
-  public void run(Connection con);
+    /**
+     * Method that runs the shell.
+     *
+     * @param con Connection the shell is associated with
+     */
+    public void run(Connection con);
 
 }//interface Shell

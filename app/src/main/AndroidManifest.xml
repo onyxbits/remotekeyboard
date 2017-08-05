@@ -1,97 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	package="de.onyxbits.remotekeyboard"
-	android:versionCode="8"
-	android:versionName="1.7" >
+    xmlns:tools="http://schemas.android.com/tools"
+    package="de.onyxbits.remotekeyboard"
+    android:versionCode="8"
+    android:versionName="1.7">
 
-	<uses-sdk
-		android:minSdkVersion="9"
-		android:targetSdkVersion="17" />
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="17" />
 
-	<uses-permission
-		android:name="android.permission.BIND_INPUT_METHOD"
-		tools:ignore="ProtectedPermissions" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission
+        android:name="android.permission.BIND_INPUT_METHOD"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-	<application
-		android:allowBackup="true"
-		android:icon="@drawable/ic_launcher"
-		android:label="@string/app_name"
-		android:theme="@style/AppTheme" >
-		<service
-			android:name="de.onyxbits.remotekeyboard.RemoteKeyboardService"
-			android:permission="android.permission.BIND_INPUT_METHOD" >
-			<intent-filter>
-				<action android:name="android.view.InputMethod" />
-			</intent-filter>
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <service
+            android:name="de.onyxbits.remotekeyboard.RemoteKeyboardService"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
 
-			<meta-data
-				android:name="android.view.im"
-				android:resource="@xml/method" />
-		</service>
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/method" />
+        </service>
 
-		<activity
-			android:name="de.onyxbits.remotekeyboard.MainActivity"
-			android:label="@string/app_name" >
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name="de.onyxbits.remotekeyboard.MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
 
-				<category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-				<data android:mimeType="text/*" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:name="de.onyxbits.remotekeyboard.WidgetActivity"
-			android:excludeFromRecents="true"
-			android:label="@string/app_name"
-			android:noHistory="true"
-			android:theme="@android:style/Theme.NoDisplay" >
-			<action android:name="android.intent.action.MAIN" />
-		</activity>
+                <data android:mimeType="text/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="de.onyxbits.remotekeyboard.WidgetActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <action android:name="android.intent.action.MAIN" />
+        </activity>
 
-		<receiver android:name="de.onyxbits.remotekeyboard.WidgetProvider" >
-			<intent-filter>
-				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-			</intent-filter>
+        <receiver android:name="de.onyxbits.remotekeyboard.WidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
 
-			<meta-data
-				android:name="android.appwidget.provider"
-				android:resource="@xml/widget" />
-		</receiver>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget" />
+        </receiver>
 
-		<activity
-			android:name="de.onyxbits.remotekeyboard.ReplacementsListActivity"
-			android:label="@string/title_activity_replacements_list"
-			android:parentActivityName="de.onyxbits.remotekeyboard.MainActivity" >
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value="de.onyxbits.remotekeyboard.MainActivity" />
-		</activity>
-		<activity
-			android:name="de.onyxbits.remotekeyboard.ReplacementActivity"
-			android:label="@string/title_activity_replacement"
-			android:parentActivityName="de.onyxbits.remotekeyboard.ReplacementsListActivity" >
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value="de.onyxbits.remotekeyboard.ReplacementsListActivity" />
-		</activity>
-		<activity
-			android:name="de.onyxbits.remotekeyboard.SettingsActivity"
-			android:label="@string/title_activity_settings"
-			android:parentActivityName="de.onyxbits.remotekeyboard.MainActivity" >
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value="de.onyxbits.remotekeyboard.MainActivity" />
-		</activity>
-	</application>
+        <activity
+            android:name="de.onyxbits.remotekeyboard.ReplacementsListActivity"
+            android:label="@string/title_activity_replacements_list"
+            android:parentActivityName="de.onyxbits.remotekeyboard.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.onyxbits.remotekeyboard.MainActivity" />
+        </activity>
+        <activity
+            android:name="de.onyxbits.remotekeyboard.ReplacementActivity"
+            android:label="@string/title_activity_replacement"
+            android:parentActivityName="de.onyxbits.remotekeyboard.ReplacementsListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.onyxbits.remotekeyboard.ReplacementsListActivity" />
+        </activity>
+        <activity
+            android:name="de.onyxbits.remotekeyboard.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="de.onyxbits.remotekeyboard.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.onyxbits.remotekeyboard.MainActivity" />
+        </activity>
+    </application>
 
 </manifest>

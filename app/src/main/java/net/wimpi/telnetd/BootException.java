@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -43,13 +43,13 @@ package net.wimpi.telnetd;
  */
 public class BootException extends Exception {
 
-  /**
-   * Constructor method for a BootException.<br>
-   *
-   * @param msg String that contains an understandable failure message.
-   */
-  public BootException(String msg) {
-    super(msg);
-  }//constructor
+    /**
+     * Constructor method for a BootException.<br>
+     *
+     * @param msg String that contains an understandable failure message.
+     */
+    public BootException(String msg) {
+        super(msg);
+    }//constructor
 
 }//class BootException

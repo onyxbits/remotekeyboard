@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -42,74 +42,74 @@ import java.util.Vector;
  */
 class CharBuffer {
 
-  //Members
-  private Vector m_Buffer;
-  private int m_Size;
+    //Members
+    private Vector m_Buffer;
+    private int m_Size;
 
-  public CharBuffer(int size) {
-    m_Buffer = new Vector(size);
-    m_Size = size;
-  }//constructor
+    public CharBuffer(int size) {
+        m_Buffer = new Vector(size);
+        m_Size = size;
+    }//constructor
 
-  public char getCharAt(int pos)
-      throws IndexOutOfBoundsException {
+    public char getCharAt(int pos)
+            throws IndexOutOfBoundsException {
 
-    return ((Character) m_Buffer.elementAt(pos)).charValue();
-  }//getCharAt
+        return ((Character) m_Buffer.elementAt(pos)).charValue();
+    }//getCharAt
 
-  public void setCharAt(int pos, char ch)
-      throws IndexOutOfBoundsException {
+    public void setCharAt(int pos, char ch)
+            throws IndexOutOfBoundsException {
 
-    m_Buffer.setElementAt(new Character(ch), pos);
-  }//setCharAt
+        m_Buffer.setElementAt(new Character(ch), pos);
+    }//setCharAt
 
-  public void insertCharAt(int pos, char ch)
-      throws BufferOverflowException, IndexOutOfBoundsException {
+    public void insertCharAt(int pos, char ch)
+            throws BufferOverflowException, IndexOutOfBoundsException {
 
-    m_Buffer.insertElementAt(new Character(ch), pos);
-  }//insertCharAt
+        m_Buffer.insertElementAt(new Character(ch), pos);
+    }//insertCharAt
 
-  public void append(char aChar)
-      throws BufferOverflowException {
+    public void append(char aChar)
+            throws BufferOverflowException {
 
-    m_Buffer.addElement(new Character(aChar));
-  }//append
+        m_Buffer.addElement(new Character(aChar));
+    }//append
 
-  public void append(String str)
-      throws BufferOverflowException {
-    for (int i = 0; i < str.length(); i++) {
-      append(str.charAt(i));
-    }
-  }//append
+    public void append(String str)
+            throws BufferOverflowException {
+        for (int i = 0; i < str.length(); i++) {
+            append(str.charAt(i));
+        }
+    }//append
 
-  public void removeCharAt(int pos)
-      throws IndexOutOfBoundsException {
+    public void removeCharAt(int pos)
+            throws IndexOutOfBoundsException {
 
-    m_Buffer.removeElementAt(pos);
-  }//removeCharAt
+        m_Buffer.removeElementAt(pos);
+    }//removeCharAt
 
-  public void clear() {
-    m_Buffer.removeAllElements();
-  }//clear
+    public void clear() {
+        m_Buffer.removeAllElements();
+    }//clear
 
-  public int size() {
-    return m_Buffer.size();
-  }//size
+    public int size() {
+        return m_Buffer.size();
+    }//size
 
-  public String toString() {
-    StringBuffer sbuf = new StringBuffer();
-    for (int i = 0; i < m_Buffer.size(); i++) {
-      sbuf.append(((Character) m_Buffer.elementAt(i)).charValue());
-    }
-    return sbuf.toString();
-  }//toString
+    public String toString() {
+        StringBuffer sbuf = new StringBuffer();
+        for (int i = 0; i < m_Buffer.size(); i++) {
+            sbuf.append(((Character) m_Buffer.elementAt(i)).charValue());
+        }
+        return sbuf.toString();
+    }//toString
 
-  public void ensureSpace(int chars)
-      throws BufferOverflowException {
+    public void ensureSpace(int chars)
+            throws BufferOverflowException {
 
-    if (chars > (m_Size - m_Buffer.size())) {
-      throw new BufferOverflowException();
-    }
-  }//ensureSpace
+        if (chars > (m_Size - m_Buffer.size())) {
+            throw new BufferOverflowException();
+        }
+    }//ensureSpace
 
 }//class CharBuffer

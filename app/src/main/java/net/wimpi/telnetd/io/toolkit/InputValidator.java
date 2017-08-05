@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -42,16 +42,16 @@ package net.wimpi.telnetd.io.toolkit;
  */
 public interface InputValidator {
 
-  /**
-   * Method that is called by the Editfield the InputValidator instance
-   * has been registered with on the Users signal that
-   * he finished editing his/her input.
-   * This gives the InputValidator the opportunity to
-   * check if the users input is valid.
-   *
-   * @param str String representing the Editfields value.
-   * @return boolean representing if input was valid or not (and user has to reedit).
-   */
-  public boolean validate(String str);
+    /**
+     * Method that is called by the Editfield the InputValidator instance
+     * has been registered with on the Users signal that
+     * he finished editing his/her input.
+     * This gives the InputValidator the opportunity to
+     * check if the users input is valid.
+     *
+     * @param str String representing the Editfields value.
+     * @return boolean representing if input was valid or not (and user has to reedit).
+     */
+    public boolean validate(String str);
 
 }//interface InputValidator

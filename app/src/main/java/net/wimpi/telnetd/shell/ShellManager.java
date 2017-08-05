@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -61,7 +61,8 @@ import java.util.Properties;
  * list of names. For each declared name there has to be an entry defining the shell.
  * </ul>
  * The definition of any shell is simply represented by a fully qualified class name, of a class
- * that implements the shell interface. Please read the documentation of this interface carefully.<br>
+ * that implements the shell interface. Please read the documentation of this interface
+ * carefully.<br>
  * The properties are passed on creation through the factory method, which is called by the
  * net.wimpi.telnetd.TelnetD class.
  *
@@ -70,175 +71,175 @@ import java.util.Properties;
  * @see net.wimpi.telnetd.shell.Shell
  */
 public class ShellManager {
-  
-  private static String TAG = ShellManager.class.getSimpleName();
-  private static ShellManager c_Self;	//Singleton reference
-  private HashMap shells;			//datastructure for shells
 
-  private ShellManager() {
-  }//constructor
+    private static String TAG = ShellManager.class.getSimpleName();
+    private static ShellManager c_Self;    //Singleton reference
+    private HashMap shells;            //datastructure for shells
 
-  /**
-   * Private constructor, instance can only be created
-   * via the public factory method.
-   */
-  private ShellManager(HashMap shells) {
-    c_Self = this;
-    this.shells = new HashMap(shells.size());    
-    setupShells(shells);
-  }//constructor
+    private ShellManager() {
+    }//constructor
 
-  /**
-   * Accessor method for shells that have been set up.<br>
-   * Note that it uses a factory method that any shell should
-   * provide via a specific class operation.<br>
-   *
-   * @param key String that represents a shell name.
-   * @return Shell instance that has been obtained from the
-   *         factory method.
-   */
-  public Shell getShell(String key) {
-    Shell myShell = null;
-    try {
-      if (!shells.containsKey(key)) {
-        return null;
-      }
-    Object obj = shells.get(key);
-    if(obj instanceof Class){
-        Class shclass = (Class) obj;
-        Method factory = shclass.getMethod("createShell", null);
-        Log.d(TAG,"[Factory Method] " + factory.toString());
-        myShell = (Shell) factory.invoke(shclass, null);
-    }
-    if(obj instanceof Shell){
-        myShell = (Shell)obj.getClass().newInstance();
-    }
-    } catch (Exception e) {
-      Log.e(TAG,"getShell()", e);
-    }
+    /**
+     * Private constructor, instance can only be created
+     * via the public factory method.
+     */
+    private ShellManager(HashMap shells) {
+        c_Self = this;
+        this.shells = new HashMap(shells.size());
+        setupShells(shells);
+    }//constructor
 
-    return myShell;
-  }//getShell
+    /**
+     * Factory method for creating the Singleton instance of
+     * this class.<br>
+     * Note that this factory method is called by the
+     * net.wimpi.telnetd.TelnetD class.
+     *
+     * @param settings Properties defining the shells as described in the
+     *                 class documentation.
+     * @return ShellManager Singleton instance.
+     */
+    public static ShellManager createShellManager(Properties settings)
+            throws BootException {
 
+        //Loading and applying settings
+        try {
+            Log.d(TAG, "createShellManager()");
+            HashMap shells = new HashMap();
+            //Custom shell definitions
+            String sh = settings.getProperty("shells");
+            if (sh != null) {
+                String[] customshs = StringUtil.split(sh, ",");
+                for (int z = 0; z < customshs.length; z++) {
+                    //we get the shell
+                    sh = settings.getProperty("shell." + customshs[z] + ".class");
+                    if (sh == null) {
+                        Log.d(TAG, "Shell entry named " + customshs[z] + " not found.");
+                        throw new BootException(
+                                "Shell " + customshs[z] + " declared but not defined.");
+                    } else {
+                        shells.put(customshs[z], sh);
+                    }
+                }
+            }
 
-  /**
-   * Method to initialize the system and custom shells
-   * whose names and classes are stored as keys within the shells.
-   * <p/>
-   * It allows other initialization routines to prepare
-   * shell specific resources. This is a similar procedure
-   * as used for Servlets.
-   */
-  private void setupShells(HashMap shells) {
-    String sh = "";
-    String shclassstr = "";
-    //temporary storage for fully qualified classnames,
-    //serves the purpose of not loading classes twice.
-    HashMap shellclasses = new HashMap(shells.size());
+            //construct manager
+            ShellManager shm = new ShellManager(shells);
+            return shm;
 
-    for (Iterator iter = shells.keySet().iterator(); iter.hasNext();) {
-      try {
-        //first we get the key
-        sh = (String) iter.next();
-        //then the fully qualified shell class string
-        Object obj = shells.get(sh);
-        if(obj instanceof Shell){
-            Log.d(TAG,"shell ["+sh+"] already instanciated");
-            this.shells.put(sh, obj);
-            continue;
+        } catch (Exception ex) {
+            Log.e(TAG, "createManager()", ex);
+            throw new BootException("Creating ShellManager Instance failed:\n" + ex.getMessage());
         }
-        shclassstr = (String) obj;
-        Log.d(TAG,"Preparing Shell [" + sh + "] " + shclassstr);
-        //now we check if the class is already loaded.
-        //If,then we reference the same class object and thats it
-        if (shellclasses.containsKey(shclassstr)) {
-          this.shells.put(sh, shellclasses.get(shclassstr));
-          Log.d(TAG,"Class [" + shclassstr + "] already loaded, using cached class object.");
-        } else {
-          //we get the class object (e.g. load it because its new)
-          Class shclass = Class.forName(shclassstr);
-          //and put it to the shells, plus our "class object cache"
-          this.shells.put(sh, shclass);
-          shellclasses.put(shclassstr, shclass);
-          Log.d(TAG,"Class [" + shclassstr + "] loaded and class object cached.");          
-        }
-      } catch (Exception e) {
-        Log.e(TAG,"setupShells()", e);
-      }
+    }//createManager
 
+    /**
+     * creates an empty shell manager
+     */
+    public static ShellManager createShellManager(HashMap shells) {
+        ShellManager shm = new ShellManager(shells);
+        return shm;
     }
-  }//setupShells
 
+    /**
+     * Accessor method for the Singleton instance of this class.<br>
+     * Note that it returns null if the instance was not properly
+     * created beforehand.
+     *
+     * @return ShellManager Singleton instance reference.
+     */
+    public static ShellManager getReference() {
+        return c_Self;
+    }//getReference
 
-  /**
-   * Factory method for creating the Singleton instance of
-   * this class.<br>
-   * Note that this factory method is called by the
-   * net.wimpi.telnetd.TelnetD class.
-   *
-   * @param settings Properties defining the shells as described in the
-   *                 class documentation.
-   * @return ShellManager Singleton instance.
-   */
-  public static ShellManager createShellManager(Properties settings)
-      throws BootException {
-
-    //Loading and applying settings
-    try {
-      Log.d(TAG,"createShellManager()");
-      HashMap shells = new HashMap();
-      //Custom shell definitions
-      String sh = settings.getProperty("shells");
-      if (sh != null) {
-        String[] customshs = StringUtil.split(sh, ",");
-        for (int z = 0; z < customshs.length; z++) {
-          //we get the shell
-          sh = settings.getProperty("shell." + customshs[z] + ".class");
-          if (sh == null) {
-            Log.d(TAG,"Shell entry named " + customshs[z] + " not found.");
-            throw new BootException("Shell " + customshs[z] + " declared but not defined.");
-          } else {
-            shells.put(customshs[z], sh);
-          }
+    /**
+     * Accessor method for shells that have been set up.<br>
+     * Note that it uses a factory method that any shell should
+     * provide via a specific class operation.<br>
+     *
+     * @param key String that represents a shell name.
+     * @return Shell instance that has been obtained from the
+     * factory method.
+     */
+    public Shell getShell(String key) {
+        Shell myShell = null;
+        try {
+            if (!shells.containsKey(key)) {
+                return null;
+            }
+            Object obj = shells.get(key);
+            if (obj instanceof Class) {
+                Class shclass = (Class) obj;
+                Method factory = shclass.getMethod("createShell", null);
+                Log.d(TAG, "[Factory Method] " + factory.toString());
+                myShell = (Shell) factory.invoke(shclass, null);
+            }
+            if (obj instanceof Shell) {
+                myShell = (Shell) obj.getClass().newInstance();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getShell()", e);
         }
-      }
 
-      //construct manager
-      ShellManager shm = new ShellManager(shells);
-      return shm;
+        return myShell;
+    }//getShell
 
-    } catch (Exception ex) {
-      Log.e(TAG,"createManager()", ex);
-      throw new BootException("Creating ShellManager Instance failed:\n" + ex.getMessage());
+    /**
+     * Method to initialize the system and custom shells
+     * whose names and classes are stored as keys within the shells.
+     * <p/>
+     * It allows other initialization routines to prepare
+     * shell specific resources. This is a similar procedure
+     * as used for Servlets.
+     */
+    private void setupShells(HashMap shells) {
+        String sh = "";
+        String shclassstr = "";
+        //temporary storage for fully qualified classnames,
+        //serves the purpose of not loading classes twice.
+        HashMap shellclasses = new HashMap(shells.size());
+
+        for (Iterator iter = shells.keySet().iterator(); iter.hasNext(); ) {
+            try {
+                //first we get the key
+                sh = (String) iter.next();
+                //then the fully qualified shell class string
+                Object obj = shells.get(sh);
+                if (obj instanceof Shell) {
+                    Log.d(TAG, "shell [" + sh + "] already instanciated");
+                    this.shells.put(sh, obj);
+                    continue;
+                }
+                shclassstr = (String) obj;
+                Log.d(TAG, "Preparing Shell [" + sh + "] " + shclassstr);
+                //now we check if the class is already loaded.
+                //If,then we reference the same class object and thats it
+                if (shellclasses.containsKey(shclassstr)) {
+                    this.shells.put(sh, shellclasses.get(shclassstr));
+                    Log.d(TAG, "Class [" + shclassstr
+                            + "] already loaded, using cached class object.");
+                } else {
+                    //we get the class object (e.g. load it because its new)
+                    Class shclass = Class.forName(shclassstr);
+                    //and put it to the shells, plus our "class object cache"
+                    this.shells.put(sh, shclass);
+                    shellclasses.put(shclassstr, shclass);
+                    Log.d(TAG, "Class [" + shclassstr + "] loaded and class object cached.");
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "setupShells()", e);
+            }
+
+        }
+    }//setupShells
+
+    public HashMap getShells() {
+        return shells;
     }
-  }//createManager
-
-  /**
-   * creates an empty shell manager
-   */
-  public static ShellManager createShellManager(HashMap shells){
-      ShellManager shm = new ShellManager(shells);
-      return shm;
-  }
-  /**
-   * Accessor method for the Singleton instance of this class.<br>
-   * Note that it returns null if the instance was not properly
-   * created beforehand.
-   *
-   * @return ShellManager Singleton instance reference.
-   */
-  public static ShellManager getReference() {
-    return c_Self;
-  }//getReference
 
 
-  public HashMap getShells() {
-      return shells;
-  }
-
-
-  public void setShells(HashMap shells) {
-      this.shells = shells;
-  }
+    public void setShells(HashMap shells) {
+        this.shells = shells;
+    }
 
 }//class ShellManager

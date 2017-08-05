@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -42,43 +42,43 @@ import java.util.StringTokenizer;
  */
 public final class StringUtil {
 
-  /**
-   * Private constructor, to prevent construction.
-   */
-  private StringUtil() {
-  }//constructor
+    /**
+     * Private constructor, to prevent construction.
+     */
+    private StringUtil() {
+    }//constructor
 
-  /**
-   * Method that splits a string with delimited fields
-   * into an array of field strings.
-   *
-   * @param str   String with delimited fields.
-   * @param delim String that represents the delimiter.
-   * @return String[] holding all fields.
-   */
-  public static String[] split(String str, String delim) {
+    /**
+     * Method that splits a string with delimited fields
+     * into an array of field strings.
+     *
+     * @param str   String with delimited fields.
+     * @param delim String that represents the delimiter.
+     * @return String[] holding all fields.
+     */
+    public static String[] split(String str, String delim) {
 
-    StringTokenizer strtok = new StringTokenizer(str, delim);
-    String[] result = new String[strtok.countTokens()];
+        StringTokenizer strtok = new StringTokenizer(str, delim);
+        String[] result = new String[strtok.countTokens()];
 
-    for (int i = 0; i < result.length; i++) {
-      result[i] = strtok.nextToken();
-    }
+        for (int i = 0; i < result.length; i++) {
+            result[i] = strtok.nextToken();
+        }
 
-    return result;
-  }//split(String,String)
+        return result;
+    }//split(String,String)
 
-  /**
-   * Method that splits a string with delimited fields
-   * into an array of field strings.
-   *
-   * @param str   String with delimited fields.
-   * @param delim char that represents the delimiter.
-   * @return String[] holding all fields.
-   */
-  public static String[] split(String str, char delim) {
-    return StringUtil.split(str, String.valueOf(delim));
-  }//split(String,char)
+    /**
+     * Method that splits a string with delimited fields
+     * into an array of field strings.
+     *
+     * @param str   String with delimited fields.
+     * @param delim char that represents the delimiter.
+     * @return String[] holding all fields.
+     */
+    public static String[] split(String str, char delim) {
+        return StringUtil.split(str, String.valueOf(delim));
+    }//split(String,char)
 
 }//class StringUtil
 

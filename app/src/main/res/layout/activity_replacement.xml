@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ReplacementActivity" >
+    tools:context=".ReplacementActivity">
 
     <TextView
         android:id="@+id/lbl_phrase"
@@ -25,7 +25,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/lbl_phrase"
         android:ems="10"
-        android:inputType="textMultiLine" >
+        android:inputType="textMultiLine">
 
         <requestFocus />
     </EditText>
@@ -38,10 +38,9 @@
         android:layout_below="@+id/input_phrase"
         android:layout_toRightOf="@+id/lbl_shortcut"
         android:ems="10"
-        android:inputType="text"
         android:imeOptions="actionDone"
-        android:singleLine="true" >
-    </EditText>
+        android:inputType="text"
+        android:singleLine="true"></EditText>
 
     <TextView
         android:id="@+id/lbl_shortcut"

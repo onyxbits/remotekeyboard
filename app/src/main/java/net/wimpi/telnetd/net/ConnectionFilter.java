@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -54,20 +54,20 @@ import java.util.Properties;
  */
 public interface ConnectionFilter {
 
-  /**
-   * Initializes this <tt>ConnectionFilter</tt>.
-   *
-   * @param props the properties of the listener that instantiated
-   *              this <tt>ConnectionFilter</tt>.
-   */
-  public void initialize(Properties props);
+    /**
+     * Initializes this <tt>ConnectionFilter</tt>.
+     *
+     * @param props the properties of the listener that instantiated
+     *              this <tt>ConnectionFilter</tt>.
+     */
+    public void initialize(Properties props);
 
-  /**
-   * Tests if a given ip address is allowed to connect.
-   *
-   * @param ip the address to be tested.
-   * @return true if allowed to connect, false otherwise.
-   */
-  public boolean isAllowed(InetAddress ip);
+    /**
+     * Tests if a given ip address is allowed to connect.
+     *
+     * @param ip the address to be tested.
+     * @return true if allowed to connect, false otherwise.
+     */
+    public boolean isAllowed(InetAddress ip);
 
 }//interface ConnectionFilter

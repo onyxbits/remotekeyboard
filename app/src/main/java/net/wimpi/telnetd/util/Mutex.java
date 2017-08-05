@@ -1,8 +1,6 @@
 //@license@
 package net.wimpi.telnetd.util;
 
-import android.util.Log;
-
 /**
  * A simple non-reentrant mutual exclusion lock.
  * The lock is free upon construction. Each acquire gets the
@@ -96,62 +94,63 @@ import android.util.Log;
  */
 public class Mutex {
 
-  /**
-   * The lock status *
-   */
-  protected boolean inuse_ = false;
+    /**
+     * The lock status *
+     */
+    protected boolean inuse_ = false;
 
-  public void acquire() throws InterruptedException {
-    //Log.d(TAG, "acquire()::" + Thread.currentThread().toString());
-    if (Thread.interrupted()) throw new InterruptedException();
-    synchronized (this) {
-      try {
-        while (inuse_) wait();
-        inuse_ = true;
-      } catch (InterruptedException ex) {
-        notify();
-        throw ex;
-      }
-    }
-  }//accquire
-
-  public synchronized void release() {
-    //Log.d(TAG, "release()::" + Thread.currentThread().toString());
-    inuse_ = false;
-    notify();
-  }//release
-
-
-  public boolean attempt(long msecs) throws InterruptedException {
-    //Log.d(TAG, "attempt()::" + Thread.currentThread().toString());
-    if (Thread.interrupted()) throw new InterruptedException();
-    synchronized (this) {
-      if (!inuse_) {
-        inuse_ = true;
-        return true;
-      } else if (msecs <= 0)
-        return false;
-      else {
-        long waitTime = msecs;
-        long start = System.currentTimeMillis();
-        try {
-          for (; ;) {
-            wait(waitTime);
-            if (!inuse_) {
-              inuse_ = true;
-              return true;
-            } else {
-              waitTime = msecs - (System.currentTimeMillis() - start);
-              if (waitTime <= 0)
-                return false;
+    public void acquire() throws InterruptedException {
+        //Log.d(TAG, "acquire()::" + Thread.currentThread().toString());
+        if (Thread.interrupted()) throw new InterruptedException();
+        synchronized (this) {
+            try {
+                while (inuse_) wait();
+                inuse_ = true;
+            } catch (InterruptedException ex) {
+                notify();
+                throw ex;
             }
-          }
-        } catch (InterruptedException ex) {
-          notify();
-          throw ex;
         }
-      }
-    }
-  }//attempt
+    }//accquire
+
+    public synchronized void release() {
+        //Log.d(TAG, "release()::" + Thread.currentThread().toString());
+        inuse_ = false;
+        notify();
+    }//release
+
+
+    public boolean attempt(long msecs) throws InterruptedException {
+        //Log.d(TAG, "attempt()::" + Thread.currentThread().toString());
+        if (Thread.interrupted()) throw new InterruptedException();
+        synchronized (this) {
+            if (!inuse_) {
+                inuse_ = true;
+                return true;
+            } else if (msecs <= 0) {
+                return false;
+            } else {
+                long waitTime = msecs;
+                long start = System.currentTimeMillis();
+                try {
+                    for (; ; ) {
+                        wait(waitTime);
+                        if (!inuse_) {
+                            inuse_ = true;
+                            return true;
+                        } else {
+                            waitTime = msecs - (System.currentTimeMillis() - start);
+                            if (waitTime <= 0) {
+                                return false;
+                            }
+                        }
+                    }
+                } catch (InterruptedException ex) {
+                    notify();
+                    throw ex;
+                }
+            }
+        }
+    }//attempt
 
 }//class Mutex

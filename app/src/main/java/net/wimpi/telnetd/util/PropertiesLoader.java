@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -48,45 +48,45 @@ import java.util.Properties;
  */
 public final class PropertiesLoader {
 
-  /**
-   * Prevent construction of instances.
-   */
-  private PropertiesLoader() {
-  }//constructor
+    /**
+     * Prevent construction of instances.
+     */
+    private PropertiesLoader() {
+    }//constructor
 
-  /**
-   * Loads a properties file from an URL given as
-   * String.
-   *
-   * @param url the string representing the URL.
-   * @return the properties instance loaded from the given URL.
-   * @throws MalformedURLException if the URL is invalid.
-   * @throws IOException           if the properties cannot be loaded from
-   *                               the given URL.
-   */
-  public static Properties loadProperties(String url)
-      throws MalformedURLException, IOException {
+    /**
+     * Loads a properties file from an URL given as
+     * String.
+     *
+     * @param url the string representing the URL.
+     * @return the properties instance loaded from the given URL.
+     * @throws MalformedURLException if the URL is invalid.
+     * @throws IOException           if the properties cannot be loaded from
+     *                               the given URL.
+     */
+    public static Properties loadProperties(String url)
+            throws MalformedURLException, IOException {
 
-    return loadProperties(new URL(url));
-  }//loadProperties(String)
+        return loadProperties(new URL(url));
+    }//loadProperties(String)
 
-  /**
-   * Loads a properties file from a given URL.
-   *
-   * @param url an URL instance.
-   * @return the properties instance loaded from the given URL.
-   * @throws IOException if the properties cannot be loaded from
-   *                     the given URL.
-   */
-  public static Properties loadProperties(URL url)
-      throws IOException {
+    /**
+     * Loads a properties file from a given URL.
+     *
+     * @param url an URL instance.
+     * @return the properties instance loaded from the given URL.
+     * @throws IOException if the properties cannot be loaded from
+     *                     the given URL.
+     */
+    public static Properties loadProperties(URL url)
+            throws IOException {
 
-    Properties newprops = new Properties();
-    InputStream in = url.openStream();
-    newprops.load(in);
-    in.close();
+        Properties newprops = new Properties();
+        InputStream in = url.openStream();
+        newprops.load(in);
+        in.close();
 
-    return newprops;
-  }//loadProperties(URL)
+        return newprops;
+    }//loadProperties(URL)
 
 }//class PropertiesLoader

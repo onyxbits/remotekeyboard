@@ -16,7 +16,7 @@
  * Neither the name of the author nor the names of its contributors
  * may be used to endorse or promote products derived from this software
  * without specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS
  * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -46,45 +46,45 @@ package net.wimpi.telnetd.net;
  */
 public interface ConnectionListener {
 
-  /**
-   * Called when a CONNECTION_IDLE event occured.
-   *
-   * @param ce ConnectionEvent instance.
-   * @see net.wimpi.telnetd.net.ConnectionEvent#CONNECTION_IDLE
-   */
-  public void connectionIdle(ConnectionEvent ce);
+    /**
+     * Called when a CONNECTION_IDLE event occured.
+     *
+     * @param ce ConnectionEvent instance.
+     * @see net.wimpi.telnetd.net.ConnectionEvent#CONNECTION_IDLE
+     */
+    public void connectionIdle(ConnectionEvent ce);
 
-  /**
-   * Called when a CONNECTION_TIMEDOUT event occured.
-   *
-   * @param ce ConnectionEvent instance.
-   * @see net.wimpi.telnetd.net.ConnectionEvent#CONNECTION_TIMEDOUT
-   */
-  public void connectionTimedOut(ConnectionEvent ce);
+    /**
+     * Called when a CONNECTION_TIMEDOUT event occured.
+     *
+     * @param ce ConnectionEvent instance.
+     * @see net.wimpi.telnetd.net.ConnectionEvent#CONNECTION_TIMEDOUT
+     */
+    public void connectionTimedOut(ConnectionEvent ce);
 
-  /**
-   * Called when a CONNECTION_LOGOUTREQUEST occured.
-   *
-   * @param ce ConnectionEvent instance.
-   * @see net.wimpi.telnetd.net.ConnectionEvent#CONNECTION_LOGOUTREQUEST
-   */
-  public void connectionLogoutRequest(ConnectionEvent ce);
+    /**
+     * Called when a CONNECTION_LOGOUTREQUEST occured.
+     *
+     * @param ce ConnectionEvent instance.
+     * @see net.wimpi.telnetd.net.ConnectionEvent#CONNECTION_LOGOUTREQUEST
+     */
+    public void connectionLogoutRequest(ConnectionEvent ce);
 
-  /**
-   * Called when a CONNECTION_BROKEN event occured.
-   *
-   * @param ce ConnectionEvent instance.
-   * @see net.wimpi.telnetd.net.ConnectionEvent#CONNECTION_BROKEN
-   */
-  //public void connectionBroken(ConnectionEvent ce);
+    /**
+     * Called when a CONNECTION_BROKEN event occured.
+     *
+     * @param ce ConnectionEvent instance.
+     * @see net.wimpi.telnetd.net.ConnectionEvent#CONNECTION_BROKEN
+     */
+    //public void connectionBroken(ConnectionEvent ce);
 
 
-  /**
-   * Called when a CONNECTION_BREAK event occured.
-   *
-   * @param ce ConnectionEvent instance.
-   * @see net.wimpi.telnetd.net.ConnectionEvent#CONNECTION_BREAK
-   */
-  public void connectionSentBreak(ConnectionEvent ce);
+    /**
+     * Called when a CONNECTION_BREAK event occured.
+     *
+     * @param ce ConnectionEvent instance.
+     * @see net.wimpi.telnetd.net.ConnectionEvent#CONNECTION_BREAK
+     */
+    public void connectionSentBreak(ConnectionEvent ce);
 
 }//interface ConnectionListener
