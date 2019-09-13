@@ -61,6 +61,12 @@ public class RemoteKeyboardService extends InputMethodService implements
 	protected HashMap<String, String> replacements;
 
 	/**
+	 * Input to GUI
+	 */
+	protected static TextInputAction tia;
+	protected static CtrlInputAction cia;
+
+	/**
 	 * Reference to the telnetserver instance
 	 */
 	private TelnetD telnetServer;
@@ -84,6 +90,9 @@ public class RemoteKeyboardService extends InputMethodService implements
 			if (telnetServer == null) {
 				telnetServer = TelnetD.createTelnetD(props);
 			}
+			tia = new TextInputAction(self);
+			cia = new CtrlInputAction(self);
+
 			telnetServer.start();
 
 			updateNotification(null);
@@ -120,9 +129,6 @@ public class RemoteKeyboardService extends InputMethodService implements
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (telnetServer != null) {
-			telnetServer.stop();
-		}
 		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notificationManager.cancel(NOTIFICATION);
 		self = null;

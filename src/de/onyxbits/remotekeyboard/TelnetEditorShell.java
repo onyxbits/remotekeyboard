@@ -76,6 +76,12 @@ public class TelnetEditorShell implements Shell {
 	public void run(Connection con) {
 		m_IO = con.getTerminalIO();
 
+		//connection maintained across ime switches
+		//so make sure we're still active ime
+		if (RemoteKeyboardService.self == null) {
+			self = null;
+			return;
+		}
 		// Ensure the screen does not go off while we are connected.
 		PowerManager pm = (PowerManager) RemoteKeyboardService.self
 				.getSystemService(Context.POWER_SERVICE);
@@ -158,8 +164,6 @@ public class TelnetEditorShell implements Shell {
 
 			showText(getWelcomeScreen());
 
-			TextInputAction tia = new TextInputAction(RemoteKeyboardService.self);
-			CtrlInputAction cia = new CtrlInputAction(RemoteKeyboardService.self);
 			ActionRunner actionRunner = new ActionRunner();
 
 			// Main loop starts here
@@ -171,23 +175,26 @@ public class TelnetEditorShell implements Shell {
 					break;
 				}
 
-				switch (decoder.decode(in)) {
-					case Decoder.INCOMPLETE: {
-						continue;
+				if (RemoteKeyboardService.self != null) {
+					switch (decoder.decode(in)) {
+						case Decoder.INCOMPLETE: {
+							continue;
+						}
+						case Decoder.PRINTABLE: {
+							RemoteKeyboardService.self.tia.text = decoder.getPrintable();
+							actionRunner.setAction(RemoteKeyboardService.self.tia);
+							break;
+						}
+						case Decoder.FUNCTIONCODE: {
+							RemoteKeyboardService.self.cia.function = decoder.getFunctionCode();
+							actionRunner.setAction(RemoteKeyboardService.self.cia);
+							break;
+						}
 					}
-					case Decoder.PRINTABLE: {
-						tia.text = decoder.getPrintable();
-						actionRunner.setAction(tia);
-						break;
-					}
-					case Decoder.FUNCTIONCODE: {
-						cia.function = decoder.getFunctionCode();
-						actionRunner.setAction(cia);
-						break;
-					}
+					RemoteKeyboardService.self.handler.post(actionRunner);
+					actionRunner.waitResult();
 				}
-				RemoteKeyboardService.self.handler.post(actionRunner);
-				actionRunner.waitResult();
+
 			} // End of main loop.
 
 			m_IO.eraseScreen();
@@ -213,7 +220,8 @@ public class TelnetEditorShell implements Shell {
 			Log.w(TAG, e);
 		}
 		finally {
-			RemoteKeyboardService.self.updateNotification(null);
+			if (RemoteKeyboardService.self != null)
+				RemoteKeyboardService.self.updateNotification(null);
 			wakeLock.release();
 			self = null;
 		}
